@@ -1,8 +1,9 @@
 # BetterScreenshots for Minecraft Beta 1.7.3
 
 ## List of Changes:
+### Under Construction
 
-## Installation using Prism Launcher
+## Installation using Prism Launcher (Mod Unfinished)
 
 1. Download an instance of Babric for Prism Launcher: https://github.com/babric/prism-instance
 2. Install Java 17, set the instance to use it, and disable compatibility checks on the instance: https://adoptium.net/temurin/releases/
