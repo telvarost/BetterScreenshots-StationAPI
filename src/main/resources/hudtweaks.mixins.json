@@ -4,7 +4,6 @@
   "package": "com.github.telvarost.hudtweaks.mixin",
   "compatibilityLevel": "JAVA_8",
   "mixins": [
-    "GameOptionsMixin",
     "GameRendererInvoker",
     "GameRendererMixin",
     "MinecraftMixin",

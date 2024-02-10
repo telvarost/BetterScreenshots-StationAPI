@@ -9,8 +9,15 @@ import org.spongepowered.asm.mixin.gen.Invoker;
 public interface GameRendererInvoker {
     @Accessor("field_2350")
     public void setupCameraTransform(float field_2350);
-//
-//    @Shadow private Minecraft minecraft;
+
+    @Accessor("field_2331")
+    public void setCameraZoom(double field_2331);
+
+    @Accessor("field_2332")
+    public void setCameraYaw(double field_2332);
+
+    @Accessor("field_2333")
+    public void setCameraPitch(double field_2333);
 
     @Invoker("method_1842")
     public abstract void setupFog(int i, float f);
@@ -20,24 +27,4 @@ public interface GameRendererInvoker {
 
     @Invoker("method_1847")
     public abstract void renderRainSnow(float f);
-
-//    @Unique
-//    public void setupCameraTransform() {
-//        this.field_2350 = (float)(512 >> (this.minecraft.options.viewDistance << 1));
-//    }
-//
-//    @Unique
-//    public void renderRainSnow() {
-//        this.method_1847(0.0F);
-//    }
-//
-//    @Unique
-//    public void updateFogColor() {
-//        this.method_1852(0.0F);
-//    }
-//
-//    @Unique
-//    public void setupFog() {
-//        this.method_1842(0, 0.0F);
-//    }
 }
