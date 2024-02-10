@@ -134,9 +134,9 @@ public class IsometricScreenshotRenderer {
                     GL11.glTranslated(posX, 0, posZ);
                     GL11.glTranslated(-this.mc.viewEntity.prevRenderX, (double)-this.height / 2.0D, -this.mc.viewEntity.prevRenderZ);
                     class_573 frustrum = new FrustrumIsom();
-                    this.renderGlobal.clipRenderersByFrustrum(frustrum, 0.0F);
+                    this.renderGlobal.method_1550(frustrum, 0.0F);
                     GL11.glTranslated(this.mc.viewEntity.prevRenderX, this.mc.viewEntity.prevRenderY, this.mc.viewEntity.prevRenderZ);
-                    this.renderGlobal.updateRenderers(this.mc.renderViewEntity, false);
+                    this.renderGlobal.method_1549(this.mc.viewEntity, false);
                     ((GameRendererInvoker) this.mc.gameRenderer).setupFog(0, 0.0F);
                     GL11.glEnable(GL11.GL_FOG);
                     GL11.glFogi(GL11.GL_FOG_MODE, GL11.GL_LINEAR);
@@ -144,18 +144,18 @@ public class IsometricScreenshotRenderer {
                     GL11.glFogf(GL11.GL_FOG_START, 5000.0F - f3);
                     GL11.glFogf(GL11.GL_FOG_END, 5000.0F + f3 * 8.0F);
                     RenderHelper.enableLighting();
-                    this.renderGlobal.renderEntities(this.mc.renderViewEntity.getPosition(0.0F), frustrum, 0.0F);
-                    this.mc.entityRenderer.renderRainSnow();
+                    this.renderGlobal.method_1544(this.mc.viewEntity.method_931(0.0F), frustrum, 0.0F);
+                    ((GameRendererInvoker) this.mc.gameRenderer).renderRainSnow(0.0F);
                     RenderHelper.disableLighting();
                     this.renderGlobal.renderSky(0.0F);
-                    GL11.glBindTexture(GL11.GL_TEXTURE_2D, this.mc.renderEngine.getTexture("/terrain.png"));
+                    GL11.glBindTexture(GL11.GL_TEXTURE_2D, this.mc.textureManager.getTextureId("/terrain.png"));
                     if(this.mc.options.ao) {
                         GL11.glShadeModel(GL11.GL_SMOOTH);
                     }
 
-                    this.renderGlobal.sortAndRender(this.mc.renderViewEntity, 0, 0.0F);
+                    this.renderGlobal.method_1548(this.mc.viewEntity, 0, 0.0F);
                     GL11.glShadeModel(GL11.GL_FLAT);
-                    if(this.worldObj.worldProvider.getCloudHeight() < this.maxCloudHeight) {
+                    if(this.worldObj.dimension.getCloudHeight() < this.maxCloudHeight) {
                         GL11.glPushMatrix();
                         this.renderGlobal.renderClouds(0.0F);
                         GL11.glPopMatrix();
@@ -164,18 +164,18 @@ public class IsometricScreenshotRenderer {
                     GL11.glEnable(GL11.GL_BLEND);
                     GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
                     GL11.glColorMask(false, false, false, false);
-                    if(this.mc.gameSettings.ambientOcclusion) {
+                    if(this.mc.options.ao) {
                         GL11.glShadeModel(GL11.GL_SMOOTH);
                     }
 
-                    GL11.glBindTexture(GL11.GL_TEXTURE_2D, this.mc.renderEngine.getTexture("/terrain.png"));
-                    int i11 = this.renderGlobal.sortAndRender(this.mc.renderViewEntity, 1, 0.0F);
+                    GL11.glBindTexture(GL11.GL_TEXTURE_2D, this.mc.textureManager.getTextureId("/terrain.png"));
+                    int i11 = this.renderGlobal.method_1548(this.mc.viewEntity, 1, 0.0F);
                     GL11.glShadeModel(GL11.GL_FLAT);
                     GL11.glEnable(GL11.GL_BLEND);
                     GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
                     GL11.glColorMask(true, true, true, true);
                     if(i11 > 0) {
-                        this.renderGlobal.renderAllRenderLists(1, 0.0F);
+                        this.renderGlobal.method_1540(1, 0.0F);
                     }
 
                     GL11.glTranslated(-posX, 0.0D, -posZ);
@@ -191,18 +191,18 @@ public class IsometricScreenshotRenderer {
             }
 
             graphics.dispose();
-            this.progressUpdate.displayLoadingString("Saving as " + outputFile.toString());
-            this.progressUpdate.setLoadingProgress(100);
+            this.progressUpdate.method_1796("Saving as " + outputFile.toString());
+            this.progressUpdate.progressStagePercentage(100);
             FileOutputStream stream = new FileOutputStream(outputFile);
             ImageIO.write(image, "png", stream);
             stream.close();
         } catch (OutOfMemoryError e) {
-            this.mc.ingameGUI.addChatMessage("Out of memory. Reduce render distance and try again.");
+            this.mc.overlay.addChatMessage("Out of memory. Reduce render distance and try again.");
         } catch (Throwable t) {
             t.printStackTrace();
         }
 
-        RenderGlobal.isTakingIsometricScreenshot = false;
+        ModHelper.ModHelperFields.isTakingIsometricScreenshot = false;
     }
 
     private BufferedImage getImageFromByteBuffer(int width, int height) {
