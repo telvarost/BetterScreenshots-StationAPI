@@ -447,7 +447,7 @@ public abstract class MinecraftMixin implements Runnable {
     }
 
 
-    @Inject(method = "run", at = @At("HEAD"), cancellable = true)
+    @Inject(method = "run", at = @At("HEAD"), cancellable = true, remap = false)
     public void run(CallbackInfo ci) {
         this.running = true;
 
