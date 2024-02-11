@@ -19,6 +19,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class ModHelper {
@@ -36,7 +37,7 @@ public class ModHelper {
         }
     }
 
-    private DateFormat dateFormat;
+    private DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd_HH.mm.ss");
     private int hugeLineHeight;
     private DataOutputStream hugeStream;
     private byte[] hugeData;

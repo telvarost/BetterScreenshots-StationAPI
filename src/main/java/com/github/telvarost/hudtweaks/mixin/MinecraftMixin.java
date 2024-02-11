@@ -788,7 +788,8 @@ public abstract class MinecraftMixin implements Runnable {
                                                 }
 
                                                 if(this.level != null && (Keyboard.isKeyDown(Keyboard.KEY_LSHIFT) || Keyboard.isKeyDown(Keyboard.KEY_RSHIFT)) && Keyboard.getEventKey() == Keyboard.KEY_F7) {
-                                                    (new IsometricScreenshotRenderer((Minecraft) (Object)this)).doRender();
+                                                    IsometricScreenshotRenderer isoRenderer = (new IsometricScreenshotRenderer((Minecraft) (Object)this));
+                                                    isoRenderer.doRender();
                                                 }
 
                                                 if (Keyboard.getEventKey() == 66) {

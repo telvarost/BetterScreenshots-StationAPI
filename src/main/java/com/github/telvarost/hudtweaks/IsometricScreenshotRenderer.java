@@ -64,7 +64,7 @@ public class IsometricScreenshotRenderer {
     }
 
     public void doRender() {
-        final int scale = this.mc.options.guiScale;
+        final int scale = 16; /* <- Image Resolution */ //this.mc.options.guiScale;
         this.progressUpdate.method_1796("Grabbing large screenshot");
         File outputFile = this.getOutputFile();
         this.progressUpdate.notifyIgnoreGameRunning("Rendering");
