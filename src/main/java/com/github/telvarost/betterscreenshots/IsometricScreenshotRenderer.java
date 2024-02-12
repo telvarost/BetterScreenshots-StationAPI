@@ -1,4 +1,4 @@
-package com.github.telvarost.hudtweaks;
+package com.github.telvarost.betterscreenshots;
 
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
@@ -12,8 +12,8 @@ import java.text.DecimalFormat;
 
 import javax.imageio.ImageIO;
 
-import com.github.telvarost.hudtweaks.mixin.GameRendererInvoker;
-import com.github.telvarost.hudtweaks.mixin.GameRendererMixin;
+import com.github.telvarost.betterscreenshots.mixin.GameRendererInvoker;
+import com.github.telvarost.betterscreenshots.mixin.GameRendererMixin;
 import net.minecraft.class_573;
 import net.minecraft.client.Minecraft;
 

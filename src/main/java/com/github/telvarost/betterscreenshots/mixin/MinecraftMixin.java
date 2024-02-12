@@ -1,7 +1,7 @@
-package com.github.telvarost.hudtweaks.mixin;
+package com.github.telvarost.betterscreenshots.mixin;
 
-import com.github.telvarost.hudtweaks.IsometricScreenshotRenderer;
-import com.github.telvarost.hudtweaks.ModHelper;
+import com.github.telvarost.betterscreenshots.IsometricScreenshotRenderer;
+import com.github.telvarost.betterscreenshots.ModHelper;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.achievement.Achievements;

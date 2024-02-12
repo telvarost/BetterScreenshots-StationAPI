@@ -10,12 +10,12 @@
 3. Add StationAPI to the mod folder for the instance: https://jenkins.glass-launcher.net/job/StationAPI/lastSuccessfulBuild/
 4. (Optional) Add Mod Menu to the mod folder for the instance: https://github.com/calmilamsy/ModMenu/releases
 5. (Optional) Add GlassConfigAPI 1.1.6+ to the mod folder for the instance: https://maven.glass-launcher.net/#/releases/net/glasslauncher/mods/GlassConfigAPI
-6. Add this mod to the mod folder for the instance: https://github.com/telvarost/HudTweaks-StationAPI/releases
+6. Add this mod to the mod folder for the instance: https://github.com/telvarost/BetterScreenshots-StationAPI/releases
 7. Run and enjoy! 👍
 
 ## Feedback
 
-Got any suggestions on what should be added next? Feel free to share it by [creating an issue](https://github.com/telvarost/HudTweaks-StationAPI/issues/new). Know how to code and want to do it yourself? Then look below on how to get started.
+Got any suggestions on what should be added next? Feel free to share it by [creating an issue](https://github.com/telvarost/BetterScreenshots-StationAPI/issues/new). Know how to code and want to do it yourself? Then look below on how to get started.
 
 ## Contributing
 

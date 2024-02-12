@@ -1,4 +1,4 @@
-//package com.github.telvarost.hudtweaks;
+//package com.github.telvarost.betterscreenshots;
 //
 //import blue.endless.jankson.Comment;
 //import net.glasslauncher.mods.api.gcapi.api.ConfigName;

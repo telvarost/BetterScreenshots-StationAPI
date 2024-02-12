@@ -1,4 +1,4 @@
-package com.github.telvarost.hudtweaks.mixin;
+package com.github.telvarost.betterscreenshots.mixin;
 
 import net.minecraft.block.BlockBase;
 import net.minecraft.block.material.Material;

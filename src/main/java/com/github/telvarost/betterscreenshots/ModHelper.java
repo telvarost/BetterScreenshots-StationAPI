@@ -1,6 +1,6 @@
-package com.github.telvarost.hudtweaks;
+package com.github.telvarost.betterscreenshots;
 
-import com.github.telvarost.hudtweaks.mixin.GameRendererInvoker;
+import com.github.telvarost.betterscreenshots.mixin.GameRendererInvoker;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.achievement.IAchievementDescriptionFormat;

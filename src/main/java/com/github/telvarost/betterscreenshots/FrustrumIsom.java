@@ -1,4 +1,4 @@
-package com.github.telvarost.hudtweaks;
+package com.github.telvarost.betterscreenshots;
 
 import net.minecraft.class_573;
 import net.minecraft.util.maths.Box;

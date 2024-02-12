@@ -1,21 +1,21 @@
 {
   "schemaVersion": 1,
-  "id": "hudtweaks",
+  "id": "betterscreenshots",
   "version": "${version}",
 
-  "name": "HudTweaks",
+  "name": "BetterScreenshots",
   "description": "Adds some HUD tweaks such as chat log scrolling and moving hotbar up/down. Special thanks to cen0b for the suggestions!",
   "authors": [
     "Telvarost"
   ],
   "contact": {
-    "issues": "https://github.com/telvarost/HudTweaks-StationAPI/issues",
-    "homepage": "https://github.com/telvarost/HudTweaks-StationAPI/",
-    "sources": "https://github.com/telvarost/HudTweaks-StationAPI/"
+    "issues": "https://github.com/telvarost/BetterScreenshots-StationAPI/issues",
+    "homepage": "https://github.com/telvarost/BetterScreenshots-StationAPI/",
+    "sources": "https://github.com/telvarost/BetterScreenshots-StationAPI/"
   },
 
   "license": "MIT",
-  "icon": "assets/hudtweaks/icon.png",
+  "icon": "assets/betterscreenshots/icon.png",
 
   "environment": "*",
   "entrypoints": {
@@ -29,7 +29,7 @@
     ]
   },
   "mixins": [
-    "hudtweaks.mixins.json"
+    "betterscreenshots.mixins.json"
   ],
 
   "depends": {

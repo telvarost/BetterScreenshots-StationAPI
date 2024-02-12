@@ -1,6 +1,6 @@
-package com.github.telvarost.hudtweaks.mixin;
+package com.github.telvarost.betterscreenshots.mixin;
 
-import com.github.telvarost.hudtweaks.ModHelper;
+import com.github.telvarost.betterscreenshots.ModHelper;
 import net.minecraft.block.BlockBase;
 import net.minecraft.class_68;
 import net.minecraft.client.Minecraft;

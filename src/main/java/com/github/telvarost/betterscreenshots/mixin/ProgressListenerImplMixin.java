@@ -1,4 +1,4 @@
-package com.github.telvarost.hudtweaks.mixin;
+package com.github.telvarost.betterscreenshots.mixin;
 
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;

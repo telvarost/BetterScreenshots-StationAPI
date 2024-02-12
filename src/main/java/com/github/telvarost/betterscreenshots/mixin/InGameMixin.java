@@ -1,6 +1,6 @@
-//package com.github.telvarost.hudtweaks.mixin;
+//package com.github.telvarost.betterscreenshots.mixin;
 //
-//import com.github.telvarost.hudtweaks.Config;
+//import com.github.telvarost.betterscreenshots.Config;
 //import net.fabricmc.api.EnvType;
 //import net.fabricmc.api.Environment;
 //import net.minecraft.client.Minecraft;
@@ -36,7 +36,7 @@
 //                    ordinal = 0
 //            )
 //    )
-//    private void hudTweaks_renderHudHotbarPosition(InGame instance, int i, int j, int k, int l, int m, int n) {
+//    private void betterScreenshots_renderHudHotbarPosition(InGame instance, int i, int j, int k, int l, int m, int n) {
 //        instance.blit(i, j - Config.ConfigFields.hotbarYPositionOffset, k, l, m, n);
 //    }
 //
@@ -48,7 +48,7 @@
 //                    ordinal = 1
 //            )
 //    )
-//    private void hudTweaks_renderHudSelectedItemBorderPosition(InGame instance, int i, int j, int k, int l, int m, int n) {
+//    private void betterScreenshots_renderHudSelectedItemBorderPosition(InGame instance, int i, int j, int k, int l, int m, int n) {
 //        instance.blit(i, j - Config.ConfigFields.hotbarYPositionOffset, k, l, m, n);
 //    }
 //
@@ -56,7 +56,7 @@
 //            method = "renderHud",
 //            constant = @Constant(intValue = 32, ordinal = 0)
 //    )
-//    private int hudTweaks_renderHudStatusBarPositions0(int value) {
+//    private int betterScreenshots_renderHudStatusBarPositions0(int value) {
 //        return value + Config.ConfigFields.hotbarYPositionOffset;
 //    }
 //
@@ -64,7 +64,7 @@
 //            method = "renderHud",
 //            constant = @Constant(intValue = 32, ordinal = 1)
 //    )
-//    private int hudTweaks_renderHudStatusBarPositions1(int value) {
+//    private int betterScreenshots_renderHudStatusBarPositions1(int value) {
 //        return value + Config.ConfigFields.hotbarYPositionOffset;
 //    }
 //
@@ -72,7 +72,7 @@
 //            method = "renderHud",
 //            constant = @Constant(intValue = 32, ordinal = 2)
 //    )
-//    private int hudTweaks_renderHudStatusBarPositions2(int value) {
+//    private int betterScreenshots_renderHudStatusBarPositions2(int value) {
 //        return value + Config.ConfigFields.hotbarYPositionOffset;
 //    }
 //
@@ -80,7 +80,7 @@
 //            method = "renderHud",
 //            constant = @Constant(intValue = 16, ordinal = 5)
 //    )
-//    private int hudTweaks_renderHudItemPositions(int value) {
+//    private int betterScreenshots_renderHudItemPositions(int value) {
 //        return value + Config.ConfigFields.hotbarYPositionOffset;
 //    }
 //
@@ -88,7 +88,7 @@
 //            method = "renderHud",
 //            constant = @Constant(intValue = 200)
 //    )
-//    private int hudTweaks_renderHudChatFadeTime(int value) {
+//    private int betterScreenshots_renderHudChatFadeTime(int value) {
 //        return (Config.ConfigFields.chatFadeTime * 2);
 //    }
 //
@@ -96,12 +96,12 @@
 //            method = "renderHud",
 //            constant = @Constant(doubleValue = 200.0)
 //    )
-//    private double hudTweaks_renderHudChatFadeTimeDivisor(double value) {
+//    private double betterScreenshots_renderHudChatFadeTimeDivisor(double value) {
 //        return (Config.ConfigFields.chatFadeTime * 2);
 //    }
 //
 //    @Inject(method = "renderHud", at = @At("HEAD"), cancellable = true)
-//    public void hudTweaks_renderHudChatScroll(float f, boolean bl, int i, int j, CallbackInfo ci) {
+//    public void betterScreenshots_renderHudChatScroll(float f, boolean bl, int i, int j, CallbackInfo ci) {
 //        if (!Config.ConfigFields.enableChatScroll) {
 //            return;
 //        }
@@ -136,7 +136,7 @@
 //                    target = "Ljava/util/List;get(I)Ljava/lang/Object;"
 //            )
 //    )
-//    public Object hudTweaks_renderHudChatOffset(List instance, int i) {
+//    public Object betterScreenshots_renderHudChatOffset(List instance, int i) {
 //        if (Config.ConfigFields.enableChatScroll) {
 //            return instance.get(i + chatOffset);
 //        } else {
