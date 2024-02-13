@@ -1,6 +1,6 @@
 # BetterScreenshots for Minecraft Beta 1.7.3
 
-Special thanks to Birevan for the original version of the mod!
+Special thanks to Birevan and Exalm for the original version of the mod!
 
 ## List of Changes:
 
