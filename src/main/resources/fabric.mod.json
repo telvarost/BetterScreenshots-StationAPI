@@ -4,9 +4,10 @@
   "version": "${version}",
 
   "name": "BetterScreenshots",
-  "description": "Adds some HUD tweaks such as chat log scrolling and moving hotbar up/down. Special thanks to cen0b for the suggestions!",
+  "description": "Adds isometric and panoramic screenshots to the game. Huge thanks to Birevan for all the help!",
   "authors": [
-    "Telvarost"
+    "Telvarost",
+    "Birevan"
   ],
   "contact": {
     "issues": "https://github.com/telvarost/BetterScreenshots-StationAPI/issues",
