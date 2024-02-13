@@ -8,7 +8,6 @@
     "GameRendererMixin",
     "MinecraftMixin",
     "ProgressListenerImplMixin",
-    "ScreenshotManagerMixin",
     "WorldRendererMixin"
   ],
   "server": [

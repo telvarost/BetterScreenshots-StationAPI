@@ -56,8 +56,8 @@ public class ModHelper {
         }
 
         this.useTarga = z5;
-        ModHelperFields.hugeWidth = i2;
-        ModHelperFields.hugeHeight = i3;
+        Config.ConfigFields.hugeWidth = i2;
+        Config.ConfigFields.hugeHeight = i3;
         this.hugeLineHeight = i4;
         File file6 = new File(file1, "screenshots");
         file6.mkdir();
@@ -89,18 +89,18 @@ public class ModHelper {
     public void saveHugePart(ByteBuffer byteBuffer1, int i2, int i3, int i4, int i5) throws IOException {
         int i6 = i4;
         int i7 = i5;
-        if(i4 > ModHelperFields.hugeWidth - i2) {
-            i6 = ModHelperFields.hugeWidth - i2;
+        if(i4 > Config.ConfigFields.hugeWidth - i2) {
+            i6 = Config.ConfigFields.hugeWidth - i2;
         }
 
-        if(i5 > ModHelperFields.hugeHeight - i3) {
-            i7 = ModHelperFields.hugeHeight - i3;
+        if(i5 > Config.ConfigFields.hugeHeight - i3) {
+            i7 = Config.ConfigFields.hugeHeight - i3;
         }
 
         this.hugeLineHeight = i7;
         for(int i8 = 0; i8 < i7; ++i8) {
             byteBuffer1.position((i5 - i7) * i4 * 3 + i8 * i4 * 3);
-            int i9 = (i2 + i8 * ModHelperFields.hugeWidth) * 3;
+            int i9 = (i2 + i8 * Config.ConfigFields.hugeWidth) * 3;
             byteBuffer1.get(this.hugeData, i9, i6 * 3);
         }
 
@@ -108,16 +108,16 @@ public class ModHelper {
 
     public void saveHugeLine(int i1) throws IOException {
         if(this.useTarga) {
-            this.hugeStream.write(this.hugeData, 0, ModHelperFields.hugeWidth * 3 * this.hugeLineHeight);
+            this.hugeStream.write(this.hugeData, 0, Config.ConfigFields.hugeWidth * 3 * this.hugeLineHeight);
         } else {
-            for(int i2 = 0; i2 < ModHelperFields.hugeWidth; ++i2) {
+            for(int i2 = 0; i2 < Config.ConfigFields.hugeWidth; ++i2) {
                 for(int i3 = 0; i3 < this.hugeLineHeight; ++i3) {
-                    int i4 = i2 + (this.hugeLineHeight - i3 - 1) * ModHelperFields.hugeWidth;
+                    int i4 = i2 + (this.hugeLineHeight - i3 - 1) * Config.ConfigFields.hugeWidth;
                     int i5 = this.hugeData[i4 * 3 + 0] & 255;
                     int i6 = this.hugeData[i4 * 3 + 1] & 255;
                     int i7 = this.hugeData[i4 * 3 + 2] & 255;
                     int i8 = 0xFF000000 | i5 << 16 | i6 << 8 | i7;
-                    this.hugeImageData[i2 + (i1 + i3) * ModHelperFields.hugeWidth] = i8;
+                    this.hugeImageData[i2 + (i1 + i3) * Config.ConfigFields.hugeWidth] = i8;
                 }
             }
         }
@@ -126,7 +126,7 @@ public class ModHelper {
 
     public String saveHugeScreenshot() throws IOException {
         if(!this.useTarga) {
-            this.hugeImage.setRGB(0, 0, ModHelperFields.hugeWidth, ModHelperFields.hugeHeight, this.hugeImageData, 0, ModHelperFields.hugeWidth);
+            this.hugeImage.setRGB(0, 0, Config.ConfigFields.hugeWidth, Config.ConfigFields.hugeHeight, this.hugeImageData, 0, Config.ConfigFields.hugeWidth);
             ImageIO.write(this.hugeImage, "png", this.hugeStream);
         }
 
@@ -185,13 +185,6 @@ public class ModHelper {
     }
 
     public static class ModHelperFields {
-
-        public static Integer isomScale = 16;
-
-        public static Integer hugeWidth = 7680;
-
-        public static Integer hugeHeight = 2240;
-
         public static Boolean isTakingIsometricScreenshot = false;
     }
 }

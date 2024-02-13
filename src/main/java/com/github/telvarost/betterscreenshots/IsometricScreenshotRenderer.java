@@ -13,7 +13,6 @@ import java.text.DecimalFormat;
 import javax.imageio.ImageIO;
 
 import com.github.telvarost.betterscreenshots.mixin.GameRendererInvoker;
-import com.github.telvarost.betterscreenshots.mixin.GameRendererMixin;
 import net.minecraft.class_573;
 import net.minecraft.client.Minecraft;
 
@@ -64,7 +63,6 @@ public class IsometricScreenshotRenderer {
     }
 
     public void doRender() {
-        final int scale = 16; /* <- Image Resolution */ //this.mc.options.guiScale;
         this.progressUpdate.method_1796("Grabbing large screenshot");
         File outputFile = this.getOutputFile();
         this.progressUpdate.notifyIgnoreGameRunning("Rendering");
@@ -92,8 +90,8 @@ public class IsometricScreenshotRenderer {
         System.out.println(posX + " " + posZ);
 
         try {
-            int i1 = (this.width * scale) + (this.length * scale);
-            int i3 = (this.height * scale) + i1 / 2;
+            int i1 = (this.width * Config.ConfigFields.isomScale) + (this.length * Config.ConfigFields.isomScale);
+            int i3 = (this.height * Config.ConfigFields.isomScale) + i1 / 2;
             BufferedImage image = new BufferedImage(i1, i3, 1);
             Graphics graphics = image.getGraphics();
             int dWidth = this.mc.actualWidth;
@@ -122,7 +120,7 @@ public class IsometricScreenshotRenderer {
                     GL11.glMatrixMode(GL11.GL_MODELVIEW);
                     GL11.glLoadIdentity();
                     GL11.glTranslatef((float)-i10, (float)-i12, -5000.0F);
-                    GL11.glScalef((float)scale, (float)-scale, (float)-scale);
+                    GL11.glScalef((float)Config.ConfigFields.isomScale, (float)-Config.ConfigFields.isomScale, (float)-Config.ConfigFields.isomScale);
                     this.floatBuffer.clear();
                     this.floatBuffer.put(1.0F).put(-0.5F).put(0.0F).put(0.0F);
                     this.floatBuffer.put(0.0F).put(1.0F).put(-1.0F).put(0.0F);

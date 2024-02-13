@@ -26,6 +26,7 @@
     "stationapi:event_bus_server": [
     ],
     "gcapi": [
+      "com.github.telvarost.betterscreenshots.Config"
     ]
   },
   "mixins": [
