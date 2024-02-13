@@ -100,43 +100,40 @@ public abstract class MinecraftMixin implements Runnable {
         instance.clearChat();
     }
 
-    @Redirect(
-            remap = false,
-            method = "run",
-            at = @At(
-                    value = "INVOKE",
-                    target = "Lorg/lwjgl/input/Keyboard;isKeyDown(I)Z",
-                    ordinal = 0
-            )
-    )
-    public boolean betterScreenshots_runIsKeyDownOne(int key) {
-        return !(this.level != null && (Keyboard.isKeyDown(Keyboard.KEY_LSHIFT) || Keyboard.isKeyDown(Keyboard.KEY_RSHIFT)) || !Keyboard.isKeyDown(Keyboard.KEY_F7));
-    }
-
-    @Redirect(
-            remap = false,
-            method = "run",
-            at = @At(
-                    value = "INVOKE",
-                    target = "Ljava/lang/Thread;sleep(J)V"
-            )
-    )
-    public void betterScreenshots_runIsKeyDownTwo(long l) {
-        //Thread.sleep(10L);
-    }
-
-    @Redirect(
-            remap = false,
-            method = "run",
-            at = @At(
-                    value = "INVOKE",
-                    target = "Lorg/lwjgl/input/Keyboard;isKeyDown(I)Z",
-                    ordinal = 1
-            )
-    )
-    public boolean betterScreenshots_runIsKeyDownTwo(int key) {
-        return ((this.level == null || !Keyboard.isKeyDown(Keyboard.KEY_LSHIFT) && !Keyboard.isKeyDown(Keyboard.KEY_RSHIFT)) && Keyboard.isKeyDown(Keyboard.KEY_F7));
-    }
+//    @Redirect(
+//            method = "run",
+//            at = @At(
+//                    value = "INVOKE",
+//                    target = "Lorg/lwjgl/input/Keyboard;isKeyDown(I)Z",
+//                    ordinal = 0
+//            )
+//    )
+//    public boolean betterScreenshots_runIsKeyDownOne(int key) {
+//        return !(this.level != null && (Keyboard.isKeyDown(Keyboard.KEY_LSHIFT) || Keyboard.isKeyDown(Keyboard.KEY_RSHIFT)) || !Keyboard.isKeyDown(Keyboard.KEY_F7));
+//    }
+//
+//    @Redirect(
+//            method = "run",
+//            at = @At(
+//                    value = "INVOKE",
+//                    target = "Ljava/lang/Thread;sleep(J)V"
+//            )
+//    )
+//    public void betterScreenshots_runIsKeyDownTwo(long l) {
+//        //Thread.sleep(10L);
+//    }
+//
+//    @Redirect(
+//            method = "run",
+//            at = @At(
+//                    value = "INVOKE",
+//                    target = "Lorg/lwjgl/input/Keyboard;isKeyDown(I)Z",
+//                    ordinal = 1
+//            )
+//    )
+//    public boolean betterScreenshots_runIsKeyDownTwo(int key) {
+//        return ((this.level == null || !Keyboard.isKeyDown(Keyboard.KEY_LSHIFT) && !Keyboard.isKeyDown(Keyboard.KEY_RSHIFT)) && Keyboard.isKeyDown(Keyboard.KEY_F7));
+//    }
 
     @Redirect(
             method = "checkTakingScreenshot",
@@ -175,7 +172,6 @@ public abstract class MinecraftMixin implements Runnable {
     }
 
     @Redirect(
-            remap = false,
             method = "toggleFullscreen",
             at = @At(
                     value = "INVOKE",
@@ -201,7 +197,6 @@ public abstract class MinecraftMixin implements Runnable {
     }
 
     @Redirect(
-            remap = false,
             method = "tick",
             at = @At(
                     value = "INVOKE",
@@ -250,7 +245,7 @@ public abstract class MinecraftMixin implements Runnable {
                 arg.spawnEntity(this.player); // Addition
             }
 
-            if (!arg.isClientSide) {
+            if (!arg.isServerSide) {
                 this.method_2130(string);
             }
 

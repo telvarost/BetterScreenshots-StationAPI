@@ -1,9 +1,16 @@
 # BetterScreenshots for Minecraft Beta 1.7.3
 
-## List of Changes:
-### Under Construction
+Special thanks to Birevan for the original version of the mod!
 
-## Installation using Prism Launcher (Mod Unfinished)
+## List of Changes:
+
+* Left/Right Shift + F7 — isometric screenshot
+  * Change the scale for isometric screenshots (16) with GlassConfigAPI.
+* Left/Right Shift + F2 + COMMAND_KEY — huge screenshot (PNG)
+  * Change the resolution for huge screenshots (7680×2240) with GlassConfigAPI.
+* Left/Right Shift + Left/Right Ctrl/⌘ + F2 + COMMAND_KEY — huge screenshot (TGA)
+
+## Installation using Prism Launcher
 
 1. Download an instance of Babric for Prism Launcher: https://github.com/babric/prism-instance
 2. Install Java 17, set the instance to use it, and disable compatibility checks on the instance: https://adoptium.net/temurin/releases/
