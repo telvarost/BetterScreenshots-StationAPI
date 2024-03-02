@@ -22,6 +22,7 @@
     "stationapi:event_bus": [
     ],
     "stationapi:event_bus_client": [
+      "com.github.telvarost.betterscreenshots.KeyBindingListener"
     ],
     "stationapi:event_bus_server": [
     ],

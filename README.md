@@ -4,11 +4,12 @@ Special thanks to Birevan and Exalm for the original version of the mod!
 
 ## List of Changes:
 
-* Left/Right Shift + F7 — isometric screenshot
+* Ability to change photo keybindings with GlassConfigAPI.
+* ISOMETRIC_PHOTO_KEYBIND (default F7) — isometric screenshot
   * Change the scale for isometric screenshots (16) with GlassConfigAPI.
-* Left/Right Shift + F2 + COMMAND_KEY — huge screenshot (PNG)
+* HUGE_PHOTO_KEYBIND (default F6) — huge screenshot (PNG)
+  * Left/Right Ctrl/⌘ + HUGE_PHOTO_KEYBIND — huge screenshot (TGA)
   * Change the resolution for huge screenshots (7680×2240) with GlassConfigAPI.
-* Left/Right Shift + Left/Right Ctrl/⌘ + F2 + COMMAND_KEY — huge screenshot (TGA)
 
 ## Installation using Prism Launcher
 

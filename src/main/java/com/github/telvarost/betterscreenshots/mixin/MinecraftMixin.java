@@ -2,6 +2,7 @@ package com.github.telvarost.betterscreenshots.mixin;
 
 import com.github.telvarost.betterscreenshots.Config;
 import com.github.telvarost.betterscreenshots.IsometricScreenshotRenderer;
+import com.github.telvarost.betterscreenshots.KeyBindingListener;
 import com.github.telvarost.betterscreenshots.ModHelper;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
@@ -29,9 +30,7 @@ import org.lwjgl.opengl.Display;
 import org.objectweb.asm.Opcodes;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
-import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.Redirect;
+import org.spongepowered.asm.mixin.injection.*;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import java.io.File;
@@ -140,27 +139,13 @@ public abstract class MinecraftMixin implements Runnable {
             at = @At(
                     value = "FIELD",
                     target = "Lnet/minecraft/client/Minecraft;isTakingScreenshot:Z",
-                    opcode = Opcodes.GETFIELD
+                    opcode = Opcodes.PUTFIELD,
+                    ordinal = 1
             )
     )
-    private boolean checkTakingScreenshot(Minecraft instance) {
-
-        this.isTakingScreenshot = true;
-        //this.overlay.addChatMessage(ScreenshotManager.takeScreenshot(gameDirectory, this.actualWidth, this.actualHeight));
-        if(this.level != null && (Keyboard.isKeyDown(Keyboard.KEY_LSHIFT) || Keyboard.isKeyDown(Keyboard.KEY_RSHIFT))) {
-            this.overlay.addChatMessage(ModHelper.mainSaveHugeScreenshot((Minecraft) (Object)this, this.gameDirectory, this.actualWidth, this.actualHeight, Config.ConfigFields.hugeWidth, Config.ConfigFields.hugeHeight, (System.getProperty("os.name").toLowerCase().contains("mac")) ? Keyboard.isKeyDown(Keyboard.KEY_LMETA) || Keyboard.isKeyDown(Keyboard.KEY_RMETA) : Keyboard.isKeyDown(Keyboard.KEY_LCONTROL) || Keyboard.isKeyDown(Keyboard.KEY_RCONTROL)));
-        } else {
-            this.overlay.addChatMessage(ScreenshotManager.takeScreenshot(gameDirectory, this.actualWidth, this.actualHeight));
-        }
-
-        return true;
-    }
-
-
-    @Inject(method = "method_2111", at = @At("HEAD"), cancellable = true)
-    private void betterScreenshots_method_2111(long l, CallbackInfo ci) {
-        if(!Keyboard.isKeyDown(Keyboard.KEY_F6)) {
-            ci.cancel();
+    private void checkTakingScreenshot(Minecraft instance, boolean value) {
+        if (!Keyboard.isKeyDown(KeyBindingListener.takeHugeScreenshot.key)) {
+            this.isTakingScreenshot = false;
         }
     }
 
@@ -207,8 +192,20 @@ public abstract class MinecraftMixin implements Runnable {
     public int betterScreenshots_tickGetEventKey() {
         int eventKey = Keyboard.getEventKey();
 
-        /** - Add F7 event key */
-        if(this.level != null && (Keyboard.isKeyDown(Keyboard.KEY_LSHIFT) || Keyboard.isKeyDown(Keyboard.KEY_RSHIFT)) && eventKey == Keyboard.KEY_F7) {
+        /** - Check for HUGE_PHOTO keybinding pressed */
+        if(Keyboard.isKeyDown(KeyBindingListener.takeHugeScreenshot.key)) {
+            if(this.level != null) {
+                this.isTakingScreenshot = true;
+                this.overlay.addChatMessage(ModHelper.mainSaveHugeScreenshot((Minecraft) (Object)this, this.gameDirectory, this.actualWidth, this.actualHeight, Config.ConfigFields.hugeWidth, Config.ConfigFields.hugeHeight, (System.getProperty("os.name").toLowerCase().contains("mac")) ? Keyboard.isKeyDown(Keyboard.KEY_LMETA) || Keyboard.isKeyDown(Keyboard.KEY_RMETA) : Keyboard.isKeyDown(Keyboard.KEY_LCONTROL) || Keyboard.isKeyDown(Keyboard.KEY_RCONTROL)));
+            }
+        } else {
+            if (!Keyboard.isKeyDown(60)) {
+                this.isTakingScreenshot = false;
+            }
+        }
+
+        /** - Check for ISOMETRIC_PHOTO keybinding pressed */
+        if(this.level != null && eventKey == KeyBindingListener.takeIsometricScreenshot.key) {
             IsometricScreenshotRenderer isoRenderer = (new IsometricScreenshotRenderer((Minecraft) (Object)this));
             isoRenderer.doRender();
         }
