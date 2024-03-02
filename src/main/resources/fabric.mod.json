@@ -4,7 +4,7 @@
   "version": "${version}",
 
   "name": "BetterScreenshots",
-  "description": "Adds isometric and panoramic screenshots to the game. Huge thanks to Birevan and Exalm for all the help!",
+  "description": "Adds isometric and large screenshots to the game. Huge thanks to Birevan and Exalm for all the help!",
   "authors": [
     "Telvarost"
   ],
