@@ -100,6 +100,7 @@ public abstract class MinecraftMixin implements Runnable {
     }
 
 //    @Redirect(
+//            remap = false,
 //            method = "run",
 //            at = @At(
 //                    value = "INVOKE",
@@ -108,10 +109,11 @@ public abstract class MinecraftMixin implements Runnable {
 //            )
 //    )
 //    public boolean betterScreenshots_runIsKeyDownOne(int key) {
-//        return !(this.level != null && (Keyboard.isKeyDown(Keyboard.KEY_LSHIFT) || Keyboard.isKeyDown(Keyboard.KEY_RSHIFT)) || !Keyboard.isKeyDown(Keyboard.KEY_F7));
+//        return !(this.level != null && !Keyboard.isKeyDown(Keyboard.KEY_F7));
 //    }
 //
 //    @Redirect(
+//            remap = false,
 //            method = "run",
 //            at = @At(
 //                    value = "INVOKE",
@@ -123,6 +125,7 @@ public abstract class MinecraftMixin implements Runnable {
 //    }
 //
 //    @Redirect(
+//            remap = false,
 //            method = "run",
 //            at = @At(
 //                    value = "INVOKE",
@@ -131,7 +134,7 @@ public abstract class MinecraftMixin implements Runnable {
 //            )
 //    )
 //    public boolean betterScreenshots_runIsKeyDownTwo(int key) {
-//        return ((this.level == null || !Keyboard.isKeyDown(Keyboard.KEY_LSHIFT) && !Keyboard.isKeyDown(Keyboard.KEY_RSHIFT)) && Keyboard.isKeyDown(Keyboard.KEY_F7));
+//        return (this.level == null || Keyboard.isKeyDown(Keyboard.KEY_F7));
 //    }
 
     @Redirect(
