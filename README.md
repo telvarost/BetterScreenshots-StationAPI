@@ -7,6 +7,7 @@ Special thanks to Birevan and Exalm for the original version of the mod!
 * Ability to change photo key bindings using controls menu in options.
 * ISOMETRIC_PHOTO_KEYBIND (default F7) — isometric screenshot (PNG)
   * Change the scale for isometric screenshots (default 16) with GlassConfigAPI.
+  * Change the rotation angle for Isometric screenshots (default 0°) with GlassConfigAPI.
 * CUSTOM_RESOLUTION_PHOTO_KEYBIND (default F6) — custom resolution screenshot (PNG)
   * Left/Right Ctrl/⌘ + CUSTOM_RESOLUTION_PHOTO_KEYBIND — custom resolution screenshot (TGA)
   * Change the resolution for custom screenshots (default 7680×2240) with GlassConfigAPI.
