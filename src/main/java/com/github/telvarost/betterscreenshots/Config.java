@@ -24,12 +24,12 @@ public class Config {
         @Comment("0=0deg, 1=90deg, 2=180deg, 3=270deg")
         public static Integer isometricPhotoRotation = 0;
 
-        @ConfigName("Custom Image Width In Pixels")
+        @ConfigName("Custom Screenshot Width In Pixels")
         @MaxLength(36863)
         @Comment("Default Value: 7680")
         public static Integer customResolutionPhotoWidth = 7680;
 
-        @ConfigName("Custom Image Height In Pixels")
+        @ConfigName("Custom Screenshot Height In Pixels")
         @MaxLength(36863)
         @Comment("Default Value: 2240")
         public static Integer customResolutionPhotoHeight = 2240;
