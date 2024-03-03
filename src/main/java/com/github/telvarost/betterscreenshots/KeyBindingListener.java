@@ -6,12 +6,12 @@ import net.modificationstation.stationapi.api.client.event.option.KeyBindingRegi
 import org.lwjgl.input.Keyboard;
 
 public class KeyBindingListener {
-    public static KeyBinding takeHugeScreenshot;
+    public static KeyBinding takeCustomResolutionScreenshot;
     public static KeyBinding takeIsometricScreenshot;
 
     @EventListener
     public void registerKeyBindings(KeyBindingRegisterEvent event) {
-        event.keyBindings.add(takeHugeScreenshot = new KeyBinding("Huge Photo", Keyboard.KEY_F6));
+        event.keyBindings.add(takeCustomResolutionScreenshot = new KeyBinding("Custom Photo", Keyboard.KEY_F6));
         event.keyBindings.add(takeIsometricScreenshot = new KeyBinding("Isometric Photo", Keyboard.KEY_F7));
     }
 }

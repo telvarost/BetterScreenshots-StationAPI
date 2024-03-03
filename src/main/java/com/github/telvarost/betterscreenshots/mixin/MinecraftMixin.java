@@ -147,7 +147,7 @@ public abstract class MinecraftMixin implements Runnable {
             )
     )
     private void checkTakingScreenshot(Minecraft instance, boolean value) {
-        if (!Keyboard.isKeyDown(KeyBindingListener.takeHugeScreenshot.key)) {
+        if (!Keyboard.isKeyDown(KeyBindingListener.takeCustomResolutionScreenshot.key)) {
             this.isTakingScreenshot = false;
         }
     }
@@ -195,11 +195,11 @@ public abstract class MinecraftMixin implements Runnable {
     public int betterScreenshots_tickGetEventKey() {
         int eventKey = Keyboard.getEventKey();
 
-        /** - Check for HUGE_PHOTO keybinding pressed */
-        if(Keyboard.isKeyDown(KeyBindingListener.takeHugeScreenshot.key)) {
+        /** - Check for CUSTOM_RESOLUTION_PHOTO keybinding pressed */
+        if(Keyboard.isKeyDown(KeyBindingListener.takeCustomResolutionScreenshot.key)) {
             if(this.level != null) {
                 this.isTakingScreenshot = true;
-                this.overlay.addChatMessage(ModHelper.mainSaveHugeScreenshot((Minecraft) (Object)this, this.gameDirectory, this.actualWidth, this.actualHeight, Config.ConfigFields.hugeWidth, Config.ConfigFields.hugeHeight, (System.getProperty("os.name").toLowerCase().contains("mac")) ? Keyboard.isKeyDown(Keyboard.KEY_LMETA) || Keyboard.isKeyDown(Keyboard.KEY_RMETA) : Keyboard.isKeyDown(Keyboard.KEY_LCONTROL) || Keyboard.isKeyDown(Keyboard.KEY_RCONTROL)));
+                this.overlay.addChatMessage(ModHelper.mainSaveCustomResolutionPhotoScreenshot((Minecraft) (Object)this, this.gameDirectory, this.actualWidth, this.actualHeight, Config.ConfigFields.customResolutionPhotoWidth, Config.ConfigFields.customResolutionPhotoHeight, (System.getProperty("os.name").toLowerCase().contains("mac")) ? Keyboard.isKeyDown(Keyboard.KEY_LMETA) || Keyboard.isKeyDown(Keyboard.KEY_RMETA) : Keyboard.isKeyDown(Keyboard.KEY_LCONTROL) || Keyboard.isKeyDown(Keyboard.KEY_RCONTROL)));
             }
         } else {
             if (!Keyboard.isKeyDown(60)) {
@@ -209,7 +209,7 @@ public abstract class MinecraftMixin implements Runnable {
 
         /** - Check for ISOMETRIC_PHOTO keybinding pressed */
         if(this.level != null && eventKey == KeyBindingListener.takeIsometricScreenshot.key) {
-            IsometricScreenshotRenderer isoRenderer = (new IsometricScreenshotRenderer((Minecraft) (Object)this));
+            IsometricScreenshotRenderer isoRenderer = (new IsometricScreenshotRenderer((Minecraft) (Object)this, this.gameDirectory));
             isoRenderer.doRender();
         }
 

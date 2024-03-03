@@ -37,13 +37,13 @@ public class ModHelper {
         }
     }
 
-    private DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd_HH.mm.ss");
-    private int hugeLineHeight;
-    private DataOutputStream hugeStream;
-    private byte[] hugeData;
-    private int[] hugeImageData;
-    private File hugeFile;
-    private BufferedImage hugeImage;
+    public static DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd_HH.mm.ss");
+    private int customResolutionPhotoLineHeight;
+    private DataOutputStream customResolutionPhotoStream;
+    private byte[] customResolutionPhotoData;
+    private int[] customResolutionPhotoImageData;
+    private File customResolutionPhotoFile;
+    private BufferedImage customResolutionPhotoImage;
     private boolean useTarga;
 
     public ModHelper(File file1, int i2, int i3, int i4, boolean z5) throws IOException {
@@ -52,25 +52,25 @@ public class ModHelper {
 
     public ModHelper(File file1, String string10, int i2, int i3, int i4, boolean z5) throws IOException {
         if(!z5) {
-            this.hugeImage = new BufferedImage(i2, i3, 1);
+            this.customResolutionPhotoImage = new BufferedImage(i2, i3, 1);
         }
 
         this.useTarga = z5;
-        Config.ConfigFields.hugeWidth = i2;
-        Config.ConfigFields.hugeHeight = i3;
-        this.hugeLineHeight = i4;
+        Config.ConfigFields.customResolutionPhotoWidth = i2;
+        Config.ConfigFields.customResolutionPhotoHeight = i3;
+        this.customResolutionPhotoLineHeight = i4;
         File file6 = new File(file1, "screenshots");
         file6.mkdir();
-        String string7 = "huge_" + dateFormat.format(new Date());
+        String string7 = "custom_" + dateFormat.format(new Date());
         if(string10 == null) {
-            for(int i8 = 1; (this.hugeFile = new File(file6, string7 + (i8 == 1 ? "" : "_" + i8) + (z5 ? ".tga" : ".png"))).exists(); ++i8) {
+            for(int i8 = 1; (this.customResolutionPhotoFile = new File(file6, string7 + (i8 == 1 ? "" : "_" + i8) + (z5 ? ".tga" : ".png"))).exists(); ++i8) {
             }
         } else {
-            this.hugeFile = new File(file6, string10);
+            this.customResolutionPhotoFile = new File(file6, string10);
         }
 
-        this.hugeData = new byte[i2 * i4 * 3];
-        this.hugeStream = new DataOutputStream(new FileOutputStream(this.hugeFile));
+        this.customResolutionPhotoData = new byte[i2 * i4 * 3];
+        this.customResolutionPhotoStream = new DataOutputStream(new FileOutputStream(this.customResolutionPhotoFile));
         if(z5) {
             byte[] b9 = new byte[18];
             b9[2] = 2;
@@ -79,62 +79,62 @@ public class ModHelper {
             b9[14] = (byte)(i3 % 256);
             b9[15] = (byte)(i3 / 256);
             b9[16] = 24;
-            this.hugeStream.write(b9);
+            this.customResolutionPhotoStream.write(b9);
         } else {
-            this.hugeImageData = new int[i2 * i3];
+            this.customResolutionPhotoImageData = new int[i2 * i3];
         }
 
     }
 
-    public void saveHugePart(ByteBuffer byteBuffer1, int i2, int i3, int i4, int i5) throws IOException {
+    public void saveCustomResolutionPhotoPart(ByteBuffer byteBuffer1, int i2, int i3, int i4, int i5) throws IOException {
         int i6 = i4;
         int i7 = i5;
-        if(i4 > Config.ConfigFields.hugeWidth - i2) {
-            i6 = Config.ConfigFields.hugeWidth - i2;
+        if(i4 > Config.ConfigFields.customResolutionPhotoWidth - i2) {
+            i6 = Config.ConfigFields.customResolutionPhotoWidth - i2;
         }
 
-        if(i5 > Config.ConfigFields.hugeHeight - i3) {
-            i7 = Config.ConfigFields.hugeHeight - i3;
+        if(i5 > Config.ConfigFields.customResolutionPhotoHeight - i3) {
+            i7 = Config.ConfigFields.customResolutionPhotoHeight - i3;
         }
 
-        this.hugeLineHeight = i7;
+        this.customResolutionPhotoLineHeight = i7;
         for(int i8 = 0; i8 < i7; ++i8) {
             byteBuffer1.position((i5 - i7) * i4 * 3 + i8 * i4 * 3);
-            int i9 = (i2 + i8 * Config.ConfigFields.hugeWidth) * 3;
-            byteBuffer1.get(this.hugeData, i9, i6 * 3);
+            int i9 = (i2 + i8 * Config.ConfigFields.customResolutionPhotoWidth) * 3;
+            byteBuffer1.get(this.customResolutionPhotoData, i9, i6 * 3);
         }
 
     }
 
-    public void saveHugeLine(int i1) throws IOException {
+    public void saveCustomResolutionPhotoLine(int i1) throws IOException {
         if(this.useTarga) {
-            this.hugeStream.write(this.hugeData, 0, Config.ConfigFields.hugeWidth * 3 * this.hugeLineHeight);
+            this.customResolutionPhotoStream.write(this.customResolutionPhotoData, 0, Config.ConfigFields.customResolutionPhotoWidth * 3 * this.customResolutionPhotoLineHeight);
         } else {
-            for(int i2 = 0; i2 < Config.ConfigFields.hugeWidth; ++i2) {
-                for(int i3 = 0; i3 < this.hugeLineHeight; ++i3) {
-                    int i4 = i2 + (this.hugeLineHeight - i3 - 1) * Config.ConfigFields.hugeWidth;
-                    int i5 = this.hugeData[i4 * 3 + 0] & 255;
-                    int i6 = this.hugeData[i4 * 3 + 1] & 255;
-                    int i7 = this.hugeData[i4 * 3 + 2] & 255;
+            for(int i2 = 0; i2 < Config.ConfigFields.customResolutionPhotoWidth; ++i2) {
+                for(int i3 = 0; i3 < this.customResolutionPhotoLineHeight; ++i3) {
+                    int i4 = i2 + (this.customResolutionPhotoLineHeight - i3 - 1) * Config.ConfigFields.customResolutionPhotoWidth;
+                    int i5 = this.customResolutionPhotoData[i4 * 3 + 0] & 255;
+                    int i6 = this.customResolutionPhotoData[i4 * 3 + 1] & 255;
+                    int i7 = this.customResolutionPhotoData[i4 * 3 + 2] & 255;
                     int i8 = 0xFF000000 | i5 << 16 | i6 << 8 | i7;
-                    this.hugeImageData[i2 + (i1 + i3) * Config.ConfigFields.hugeWidth] = i8;
+                    this.customResolutionPhotoImageData[i2 + (i1 + i3) * Config.ConfigFields.customResolutionPhotoWidth] = i8;
                 }
             }
         }
 
     }
 
-    public String saveHugeScreenshot() throws IOException {
+    public String saveCustomResolutionPhotoScreenshot() throws IOException {
         if(!this.useTarga) {
-            this.hugeImage.setRGB(0, 0, Config.ConfigFields.hugeWidth, Config.ConfigFields.hugeHeight, this.hugeImageData, 0, Config.ConfigFields.hugeWidth);
-            ImageIO.write(this.hugeImage, "png", this.hugeStream);
+            this.customResolutionPhotoImage.setRGB(0, 0, Config.ConfigFields.customResolutionPhotoWidth, Config.ConfigFields.customResolutionPhotoHeight, this.customResolutionPhotoImageData, 0, Config.ConfigFields.customResolutionPhotoWidth);
+            ImageIO.write(this.customResolutionPhotoImage, "png", this.customResolutionPhotoStream);
         }
 
-        this.hugeStream.close();
-        return "Saved screenshot as " + this.hugeFile.getName();
+        this.customResolutionPhotoStream.close();
+        return "Saved screenshot as " + this.customResolutionPhotoFile.getName();
     }
 
-    public static String mainSaveHugeScreenshot(Minecraft instance, File file1, int i2, int i3, int i4, int i5, boolean z6) {
+    public static String mainSaveCustomResolutionPhotoScreenshot(Minecraft instance, File file1, int i2, int i3, int i4, int i5, boolean z6) {
         try {
             ByteBuffer byteBuffer6 = BufferUtils.createByteBuffer(i2 * i3 * 3);
             ModHelper screenShotHelper7 = new ModHelper(file1, i4, i5, i3, z6);
@@ -169,13 +169,13 @@ public class ModHelper {
                     GL11.glPixelStorei(GL11.GL_PACK_ALIGNMENT, 1);
                     GL11.glPixelStorei(GL11.GL_UNPACK_ALIGNMENT, 1);
                     GL11.glReadPixels(0, 0, i2, i3, z6 ? GL12.GL_BGR : GL11.GL_RGB, GL11.GL_UNSIGNED_BYTE, byteBuffer6);
-                    screenShotHelper7.saveHugePart(byteBuffer6, i15, i14, i2, i3);
+                    screenShotHelper7.saveCustomResolutionPhotoPart(byteBuffer6, i15, i14, i2, i3);
                 }
 
-                screenShotHelper7.saveHugeLine(i14);
+                screenShotHelper7.saveCustomResolutionPhotoLine(i14);
             }
 
-            return screenShotHelper7.saveHugeScreenshot();
+            return screenShotHelper7.saveCustomResolutionPhotoScreenshot();
         } catch (OutOfMemoryError e) {
             return "Failed to save: " + "Out of memory";
         } catch (Exception exception24) {

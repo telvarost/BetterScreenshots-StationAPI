@@ -17,16 +17,21 @@ public class Config {
         @ConfigName("Isometric Screenshot Resolution")
         @MaxLength(255)
         @Comment("Default Value: 16")
-        public static Integer isomScale = 16;
+        public static Integer isometricPhotoScale = 16;
 
-        @ConfigName("Panorama Image Width In Pixels")
+        @ConfigName("Isometric Screenshot Rotation")
+        @MaxLength(3)
+        @Comment("0=0deg, 1=90deg, 2=180deg, 3=270deg")
+        public static Integer isometricPhotoRotation = 0;
+
+        @ConfigName("Custom Image Width In Pixels")
         @MaxLength(36863)
         @Comment("Default Value: 7680")
-        public static Integer hugeWidth = 7680;
+        public static Integer customResolutionPhotoWidth = 7680;
 
-        @ConfigName("Panorama Image Height In Pixels")
+        @ConfigName("Custom Image Height In Pixels")
         @MaxLength(36863)
         @Comment("Default Value: 2240")
-        public static Integer hugeHeight = 2240;
+        public static Integer customResolutionPhotoHeight = 2240;
     }
 }

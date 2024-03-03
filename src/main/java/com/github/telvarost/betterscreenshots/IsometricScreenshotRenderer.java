@@ -9,6 +9,7 @@ import java.io.FileOutputStream;
 import java.nio.ByteBuffer;
 import java.nio.FloatBuffer;
 import java.text.DecimalFormat;
+import java.util.Date;
 
 import javax.imageio.ImageIO;
 
@@ -36,8 +37,10 @@ public class IsometricScreenshotRenderer {
     private float maxCloudHeight = 108.0F;
     private ByteBuffer byteBuffer;
     private FloatBuffer floatBuffer = BufferUtils.createFloatBuffer(16);
+    private File gameDirectory;
 
-    public IsometricScreenshotRenderer(Minecraft minecraft) {
+    public IsometricScreenshotRenderer(Minecraft minecraft, File _gameDirectory) {
+        this.gameDirectory = _gameDirectory;
         this.progressUpdate = minecraft.progressListener;
         this.mc = minecraft;
         this.worldObj = this.mc.level;
@@ -52,11 +55,16 @@ public class IsometricScreenshotRenderer {
 
     private File getOutputFile() {
         File file = null;
-        int scrNumber = 0;
+        int scrNumber = 1;
 
         do {
-            File home = new File(System.getProperty("user.home", "."));
-            file = new File(home, "mc_map_" + this.decimalFormat.format(scrNumber++) + ".png");
+            File outputFilePath = new File(this.gameDirectory, "screenshots");
+            outputFilePath.mkdir();
+            if (1 == scrNumber) {
+                file = new File(outputFilePath, "isometric_" + ModHelper.dateFormat.format(new Date()) + ".png");
+            } else {
+                file = new File(outputFilePath, "isometric_" + ModHelper.dateFormat.format(new Date()) + "_" + scrNumber + ".png");
+            }
         } while(file.exists());
 
         return file.getAbsoluteFile();
@@ -90,8 +98,8 @@ public class IsometricScreenshotRenderer {
         System.out.println(posX + " " + posZ);
 
         try {
-            int i1 = (this.width * Config.ConfigFields.isomScale) + (this.length * Config.ConfigFields.isomScale);
-            int i3 = (this.height * Config.ConfigFields.isomScale) + i1 / 2;
+            int i1 = (this.width * Config.ConfigFields.isometricPhotoScale) + (this.length * Config.ConfigFields.isometricPhotoScale);
+            int i3 = (this.height * Config.ConfigFields.isometricPhotoScale) + i1 / 2;
             BufferedImage image = new BufferedImage(i1, i3, 1);
             Graphics graphics = image.getGraphics();
             int dWidth = this.mc.actualWidth;
@@ -120,7 +128,7 @@ public class IsometricScreenshotRenderer {
                     GL11.glMatrixMode(GL11.GL_MODELVIEW);
                     GL11.glLoadIdentity();
                     GL11.glTranslatef((float)-i10, (float)-i12, -5000.0F);
-                    GL11.glScalef((float)Config.ConfigFields.isomScale, (float)-Config.ConfigFields.isomScale, (float)-Config.ConfigFields.isomScale);
+                    GL11.glScalef((float)Config.ConfigFields.isometricPhotoScale, (float)-Config.ConfigFields.isometricPhotoScale, (float)-Config.ConfigFields.isometricPhotoScale);
                     this.floatBuffer.clear();
                     this.floatBuffer.put(1.0F).put(-0.5F).put(0.0F).put(0.0F);
                     this.floatBuffer.put(0.0F).put(1.0F).put(-1.0F).put(0.0F);
@@ -128,7 +136,7 @@ public class IsometricScreenshotRenderer {
                     this.floatBuffer.put(0.0F).put(0.0F).put(0.0F).put(1.0F);
                     this.floatBuffer.flip();
                     GL11.glMultMatrix(this.floatBuffer);
-                    GL11.glRotatef(0.0F, 0.0F, 1.0F, 0.0F);
+                    GL11.glRotatef(Config.ConfigFields.isometricPhotoRotation * 90.0F, 0.0F, 1.0F, 0.0F);
                     GL11.glTranslated(posX, 0, posZ);
                     GL11.glTranslated(-this.mc.viewEntity.prevRenderX, (double)-this.height / 2.0D, -this.mc.viewEntity.prevRenderZ);
                     class_573 frustrum = new FrustrumIsom();
@@ -189,7 +197,7 @@ public class IsometricScreenshotRenderer {
             }
 
             graphics.dispose();
-            this.progressUpdate.method_1796("Saving as " + outputFile.toString());
+            this.progressUpdate.method_1796("Saving screenshot as " + outputFile.getName().toString());
             this.progressUpdate.progressStagePercentage(100);
             FileOutputStream stream = new FileOutputStream(outputFile);
             ImageIO.write(image, "png", stream);
