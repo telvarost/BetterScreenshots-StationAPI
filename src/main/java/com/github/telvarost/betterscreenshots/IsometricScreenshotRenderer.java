@@ -8,7 +8,6 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.nio.ByteBuffer;
 import java.nio.FloatBuffer;
-import java.text.DecimalFormat;
 import java.util.Date;
 
 import javax.imageio.ImageIO;
@@ -30,7 +29,6 @@ public class IsometricScreenshotRenderer {
     private Minecraft mc;
     private Level worldObj;
     private WorldRenderer renderGlobal;
-    private DecimalFormat decimalFormat = new DecimalFormat("0000");
     private int width;
     private int length;
     private int height = 256;
@@ -73,7 +71,7 @@ public class IsometricScreenshotRenderer {
     public void doRender() {
         this.progressUpdate.notifyIgnoreGameRunning("Taking isometric screenshot");
         File outputFile = this.getOutputFile();
-        this.progressUpdate.method_1796("Rendering with resolution of " + Config.ConfigFields.isometricPhotoScale + " and angle of " + Config.ConfigFields.isometricPhotoRotation + " deg");
+        this.progressUpdate.method_1796("Rendering with resolution of " + Config.ConfigFields.isometricPhotoScale + " and angle of " + (Config.ConfigFields.isometricPhotoRotation * 90) + " deg");
         this.progressUpdate.progressStagePercentage(0);
         ModHelper.ModHelperFields.isTakingIsometricScreenshot = true;
         double posX = this.mc.viewEntity.prevRenderX;
