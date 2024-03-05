@@ -5,6 +5,7 @@ Special thanks to Birevan and Exalm for the original version of the mod!
 ## List of Changes:
 
 * Ability to change photo key bindings using controls menu in options.
+* Ability to disable rendering bedrock in the nether (for nether isometric photos).
 * ISOMETRIC_PHOTO_KEYBIND (default F7) — isometric screenshot (PNG)
   * Change the scale for isometric screenshots (default 16) with GlassConfigAPI.
   * Change the rotation angle for Isometric screenshots (default 0°) with GlassConfigAPI.

@@ -13,7 +13,6 @@ import net.minecraft.client.particle.ParticleManager;
 import net.minecraft.client.render.*;
 import net.minecraft.client.sound.SoundHelper;
 import net.minecraft.client.texture.TextureManager;
-import net.minecraft.client.util.*;
 import net.minecraft.entity.Living;
 import net.minecraft.entity.player.AbstractClientPlayer;
 import net.minecraft.entity.player.PlayerBase;
@@ -209,6 +208,7 @@ public abstract class MinecraftMixin implements Runnable {
 
         /** - Check for ISOMETRIC_PHOTO keybinding pressed */
         if(this.level != null && eventKey == KeyBindingListener.takeIsometricScreenshot.key) {
+            this.progressListener.notifyWithGameRunning("Taking isometric screenshot");
             IsometricScreenshotRenderer isoRenderer = (new IsometricScreenshotRenderer((Minecraft) (Object)this, this.gameDirectory));
             isoRenderer.doRender();
         }

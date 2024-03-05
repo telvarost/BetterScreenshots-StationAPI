@@ -71,9 +71,9 @@ public class IsometricScreenshotRenderer {
     }
 
     public void doRender() {
-        this.progressUpdate.method_1796("Grabbing large screenshot");
+        this.progressUpdate.notifyIgnoreGameRunning("Taking isometric screenshot");
         File outputFile = this.getOutputFile();
-        this.progressUpdate.notifyIgnoreGameRunning("Rendering");
+        this.progressUpdate.method_1796("Rendering with resolution of " + Config.ConfigFields.isometricPhotoScale + " and angle of " + Config.ConfigFields.isometricPhotoRotation + " deg");
         this.progressUpdate.progressStagePercentage(0);
         ModHelper.ModHelperFields.isTakingIsometricScreenshot = true;
         double posX = this.mc.viewEntity.prevRenderX;

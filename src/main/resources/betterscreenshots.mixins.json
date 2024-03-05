@@ -4,6 +4,7 @@
   "package": "com.github.telvarost.betterscreenshots.mixin",
   "compatibilityLevel": "JAVA_8",
   "mixins": [
+    "BedrockMixin",
     "GameRendererInvoker",
     "GameRendererMixin",
     "MinecraftMixin",
