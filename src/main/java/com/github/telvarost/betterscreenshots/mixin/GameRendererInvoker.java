@@ -19,8 +19,8 @@ public interface GameRendererInvoker {
     @Accessor("field_2333")
     public void setCameraPitch(double field_2333);
 
-    @Invoker("method_1842")
-    public abstract void setupFog(int i, float f);
+//    @Invoker("method_1842")
+//    public abstract void setupFog(int i, float f);
 
     @Invoker("method_1852")
     public abstract void updateFogColor(float f);

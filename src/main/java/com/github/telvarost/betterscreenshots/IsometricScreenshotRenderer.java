@@ -141,7 +141,7 @@ public class IsometricScreenshotRenderer {
                     this.renderGlobal.method_1550(frustrum, 0.0F);
                     GL11.glTranslated(this.mc.viewEntity.prevRenderX, this.mc.viewEntity.prevRenderY, this.mc.viewEntity.prevRenderZ);
                     this.renderGlobal.method_1549(this.mc.viewEntity, false);
-                    ((GameRendererInvoker) this.mc.gameRenderer).setupFog(0, 0.0F);
+                    //((GameRendererInvoker) this.mc.gameRenderer).setupFog(0, 0.0F);
                     GL11.glEnable(GL11.GL_FOG);
                     GL11.glFogi(GL11.GL_FOG_MODE, GL11.GL_LINEAR);
                     float f3 = (float)this.height * 8.0F;
