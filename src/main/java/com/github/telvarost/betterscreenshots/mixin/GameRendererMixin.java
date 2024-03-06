@@ -62,27 +62,4 @@ public abstract class GameRendererMixin {
             instance.method_1554(arg, arg2, i, arg3, f);
         }
     }
-
-    @Redirect(
-            method = "method_1842",
-            at = @At(
-                    value = "FIELD",
-                    target = "Lnet/minecraft/level/dimension/Dimension;blocksCompassAndClock:Z",
-                    opcode = Opcodes.GETFIELD
-            )
-    )
-    private boolean betterScreenshots_method_1842(Dimension instance) {
-        if (this.minecraft.level.dimension.blocksCompassAndClock) {
-            if(this.minecraft.options.fancyGraphics) {
-                GL11.glFogi(GL11.GL_FOG_MODE, GL11.GL_EXP);
-                GL11.glFogf(GL11.GL_FOG_DENSITY, 4.60517018598809F / this.field_2350 * 0.99F);
-            } else {
-                GL11.glFogf(GL11.GL_FOG_START, 0.0F);
-            }
-        } else if(this.minecraft.level.dimension.id == 1 && this.minecraft.options.fancyGraphics) {
-            GL11.glFogf(2915, 0.0F);
-        }
-
-        return false;
-    }
 }
