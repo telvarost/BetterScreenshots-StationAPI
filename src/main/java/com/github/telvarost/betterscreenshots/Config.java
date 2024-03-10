@@ -7,7 +7,7 @@ import net.glasslauncher.mods.api.gcapi.api.MaxLength;
 
 public class Config {
 
-    @GConfig(value = "config", visibleName = "BetterScreenshots Config")
+    @GConfig(value = "config", visibleName = "BetterScreenshots")
     public static ConfigFields config = new ConfigFields();
 
     public static class ConfigFields {
@@ -31,8 +31,11 @@ public class Config {
         public static Integer isometricPhotoScale = 8;
 
         @ConfigName("Isometric Screenshot Rotation")
-        @MaxLength(3)
-        @Comment("0=0deg, 1=90deg, 2=180deg, 3=270deg")
-        public static Integer isometricPhotoRotation = 0;
+        public static IsometricAngleEnum isometricPhotoRotation = IsometricAngleEnum.ANGLE_0_DEGREES;
+
+        @ConfigName("Isometric Screenshot Rotation Offset")
+        @MaxLength(90)
+        @Comment("Zero degrees recommended for best angle")
+        public static Integer isometricPhotoRotationOffset = 0;
     }
 }

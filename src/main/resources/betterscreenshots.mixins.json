@@ -4,16 +4,16 @@
   "package": "com.github.telvarost.betterscreenshots.mixin",
   "compatibilityLevel": "JAVA_8",
   "mixins": [
+  ],
+  "server": [
+  ],
+  "client": [
     "BedrockMixin",
     "GameRendererInvoker",
     "GameRendererMixin",
     "MinecraftMixin",
     "ProgressListenerImplMixin",
     "WorldRendererMixin"
-  ],
-  "server": [
-  ],
-  "client": [
   ],
   "injectors": {
     "defaultRequire": 1

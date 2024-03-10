@@ -71,7 +71,8 @@ public class IsometricScreenshotRenderer {
     public void doRender() {
         this.progressUpdate.notifyIgnoreGameRunning("Taking isometric screenshot");
         File outputFile = this.getOutputFile();
-        this.progressUpdate.method_1796("Rendering with resolution of " + Config.ConfigFields.isometricPhotoScale + " and angle of " + (Config.ConfigFields.isometricPhotoRotation * 90) + " deg");
+        int isometricScreenshotAngle = ((Config.ConfigFields.isometricPhotoRotation.ordinal() * 90) + Config.ConfigFields.isometricPhotoRotationOffset);
+        this.progressUpdate.method_1796("Rendering with resolution of " + Config.ConfigFields.isometricPhotoScale + " and angle of " + isometricScreenshotAngle + " deg");
         this.progressUpdate.progressStagePercentage(0);
         ModHelper.ModHelperFields.isTakingIsometricScreenshot = true;
         double posX = this.mc.viewEntity.prevRenderX;
@@ -134,14 +135,14 @@ public class IsometricScreenshotRenderer {
                     this.floatBuffer.put(0.0F).put(0.0F).put(0.0F).put(1.0F);
                     this.floatBuffer.flip();
                     GL11.glMultMatrix(this.floatBuffer);
-                    GL11.glRotatef(Config.ConfigFields.isometricPhotoRotation * 90.0F, 0.0F, 1.0F, 0.0F);
+                    GL11.glRotatef(isometricScreenshotAngle, 0.0F, 1.0F, 0.0F);
                     GL11.glTranslated(posX, 0, posZ);
                     GL11.glTranslated(-this.mc.viewEntity.prevRenderX, (double)-this.height / 2.0D, -this.mc.viewEntity.prevRenderZ);
                     class_573 frustrum = new FrustrumIsom();
                     this.renderGlobal.method_1550(frustrum, 0.0F);
                     GL11.glTranslated(this.mc.viewEntity.prevRenderX, this.mc.viewEntity.prevRenderY, this.mc.viewEntity.prevRenderZ);
                     this.renderGlobal.method_1549(this.mc.viewEntity, false);
-                    ((GameRendererInvoker) this.mc.gameRenderer).setupFog(0, 0.0F);
+                    //((GameRendererInvoker) this.mc.gameRenderer).setupFog(0, 0.0F);
                     GL11.glEnable(GL11.GL_FOG);
                     GL11.glFogi(GL11.GL_FOG_MODE, GL11.GL_LINEAR);
                     float f3 = (float)this.height * 8.0F;

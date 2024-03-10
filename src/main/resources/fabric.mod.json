@@ -28,6 +28,9 @@
     ],
     "gcapi": [
       "com.github.telvarost.betterscreenshots.Config"
+    ],
+    "gcapi:factory_provider": [
+      "com.github.telvarost.betterscreenshots.IsometricAngleEnumFactory"
     ]
   },
   "mixins": [

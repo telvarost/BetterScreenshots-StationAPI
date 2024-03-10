@@ -1,6 +1,8 @@
 # BetterScreenshots for Minecraft Beta 1.7.3
 
 Special thanks to Birevan and Exalm for the original version of the mod!
+* Mod now has Multiplayer support and is using GlassConfigAPI 2.0+
+  * This is a client side mod and is not needed by the server
 
 ## List of Changes:
 
