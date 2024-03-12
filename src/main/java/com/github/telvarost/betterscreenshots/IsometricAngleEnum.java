@@ -15,4 +15,9 @@ public enum IsometricAngleEnum {
     IsometricAngleEnum(String stringValue) {
         this.stringValue = stringValue;
     }
+
+    @Override
+    public String toString() {
+        return stringValue;
+    }
 }
