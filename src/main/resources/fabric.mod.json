@@ -17,7 +17,7 @@
   "license": "MIT",
   "icon": "assets/betterscreenshots/icon.png",
 
-  "environment": "*",
+  "environment": "client",
   "entrypoints": {
     "stationapi:event_bus": [
     ],
@@ -39,5 +39,9 @@
 
   "depends": {
     "minecraft": "1.0.0-beta.7.3"
+  },
+
+  "custom": {
+    "modmenu:clientsideOnly": true
   }
 }
