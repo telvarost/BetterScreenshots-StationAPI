@@ -37,5 +37,9 @@ public class Config {
         @MaxLength(90)
         @Comment("Zero degrees recommended for best angle")
         public static Integer isometricPhotoRotationOffset = 0;
+
+        @ConfigName("Mirror Isometric Screenshot")
+        @Comment("Flips the isometric screenshot horizontally")
+        public static Boolean mirrorIsometricScreenshot = false;
     }
 }

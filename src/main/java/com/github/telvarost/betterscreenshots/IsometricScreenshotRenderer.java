@@ -195,6 +195,18 @@ public class IsometricScreenshotRenderer {
                 }
             }
 
+            if (!Config.config.mirrorIsometricScreenshot) {
+                int width = image.getWidth();
+                int height = image.getHeight();
+                BufferedImage flipped = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
+                for (int y = 0; y < height; y++) {
+                    for (int x = 0; x < width; x++) {
+                        flipped.setRGB((width - 1) - x, y, image.getRGB(x, y));
+                    }
+                }
+                image = flipped;
+            }
+
             graphics.dispose();
             this.progressUpdate.method_1796("Saving screenshot as " + outputFile.getName().toString());
             this.progressUpdate.progressStagePercentage(100);
