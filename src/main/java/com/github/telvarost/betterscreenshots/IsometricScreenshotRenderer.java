@@ -71,8 +71,8 @@ public class IsometricScreenshotRenderer {
     public void doRender() {
         this.progressUpdate.notifyIgnoreGameRunning("Taking isometric screenshot");
         File outputFile = this.getOutputFile();
-        int isometricScreenshotAngle = ((Config.ConfigFields.isometricPhotoRotation.ordinal() * 90) + Config.ConfigFields.isometricPhotoRotationOffset);
-        this.progressUpdate.method_1796("Rendering with resolution of " + Config.ConfigFields.isometricPhotoScale + " and angle of " + isometricScreenshotAngle + " deg");
+        int isometricScreenshotAngle = ((Config.config.isometricPhotoRotation.ordinal() * 90) + Config.config.isometricPhotoRotationOffset);
+        this.progressUpdate.method_1796("Rendering with resolution of " + Config.config.isometricPhotoScale + " and angle of " + isometricScreenshotAngle + " deg");
         this.progressUpdate.progressStagePercentage(0);
         ModHelper.ModHelperFields.isTakingIsometricScreenshot = true;
         double posX = this.mc.viewEntity.prevRenderX;
@@ -97,8 +97,8 @@ public class IsometricScreenshotRenderer {
         System.out.println(posX + " " + posZ);
 
         try {
-            int i1 = (this.width * Config.ConfigFields.isometricPhotoScale) + (this.length * Config.ConfigFields.isometricPhotoScale);
-            int i3 = (this.height * Config.ConfigFields.isometricPhotoScale) + i1 / 2;
+            int i1 = (this.width * Config.config.isometricPhotoScale) + (this.length * Config.config.isometricPhotoScale);
+            int i3 = (this.height * Config.config.isometricPhotoScale) + i1 / 2;
             BufferedImage image = new BufferedImage(i1, i3, 1);
             Graphics graphics = image.getGraphics();
             int dWidth = this.mc.actualWidth;
@@ -127,7 +127,7 @@ public class IsometricScreenshotRenderer {
                     GL11.glMatrixMode(GL11.GL_MODELVIEW);
                     GL11.glLoadIdentity();
                     GL11.glTranslatef((float)-i10, (float)-i12, -5000.0F);
-                    GL11.glScalef((float)Config.ConfigFields.isometricPhotoScale, (float)-Config.ConfigFields.isometricPhotoScale, (float)-Config.ConfigFields.isometricPhotoScale);
+                    GL11.glScalef((float)Config.config.isometricPhotoScale, (float)-Config.config.isometricPhotoScale, (float)-Config.config.isometricPhotoScale);
                     this.floatBuffer.clear();
                     this.floatBuffer.put(1.0F).put(-0.5F).put(0.0F).put(0.0F);
                     this.floatBuffer.put(0.0F).put(1.0F).put(-1.0F).put(0.0F);

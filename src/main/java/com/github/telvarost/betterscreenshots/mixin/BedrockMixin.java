@@ -35,7 +35,7 @@ public class BedrockMixin {
 
             if (  (null != player)
                && (-1 == player.dimensionId)
-               && (Config.ConfigFields.disableRenderingNetherBedrock)
+               && (Config.config.disableRenderingNetherBedrock)
             ) {
                 cir.setReturnValue(false);
             }

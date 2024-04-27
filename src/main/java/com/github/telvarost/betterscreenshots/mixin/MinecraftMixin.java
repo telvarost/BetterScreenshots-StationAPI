@@ -198,7 +198,7 @@ public abstract class MinecraftMixin implements Runnable {
         if(Keyboard.isKeyDown(KeyBindingListener.takeCustomResolutionScreenshot.key)) {
             if(this.level != null) {
                 this.isTakingScreenshot = true;
-                this.overlay.addChatMessage(ModHelper.mainSaveCustomResolutionPhotoScreenshot((Minecraft) (Object)this, this.gameDirectory, this.actualWidth, this.actualHeight, Config.ConfigFields.customResolutionPhotoWidth, Config.ConfigFields.customResolutionPhotoHeight, (System.getProperty("os.name").toLowerCase().contains("mac")) ? Keyboard.isKeyDown(Keyboard.KEY_LMETA) || Keyboard.isKeyDown(Keyboard.KEY_RMETA) : Keyboard.isKeyDown(Keyboard.KEY_LCONTROL) || Keyboard.isKeyDown(Keyboard.KEY_RCONTROL)));
+                this.overlay.addChatMessage(ModHelper.mainSaveCustomResolutionPhotoScreenshot((Minecraft) (Object)this, this.gameDirectory, this.actualWidth, this.actualHeight, Config.config.customResolutionPhotoWidth, Config.config.customResolutionPhotoHeight, (System.getProperty("os.name").toLowerCase().contains("mac")) ? Keyboard.isKeyDown(Keyboard.KEY_LMETA) || Keyboard.isKeyDown(Keyboard.KEY_RMETA) : Keyboard.isKeyDown(Keyboard.KEY_LCONTROL) || Keyboard.isKeyDown(Keyboard.KEY_RCONTROL)));
             }
         } else {
             if (!Keyboard.isKeyDown(60)) {

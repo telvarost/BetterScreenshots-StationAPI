@@ -56,8 +56,8 @@ public class ModHelper {
         }
 
         this.useTarga = z5;
-        Config.ConfigFields.customResolutionPhotoWidth = i2;
-        Config.ConfigFields.customResolutionPhotoHeight = i3;
+        Config.config.customResolutionPhotoWidth = i2;
+        Config.config.customResolutionPhotoHeight = i3;
         this.customResolutionPhotoLineHeight = i4;
         File file6 = new File(file1, "screenshots");
         file6.mkdir();
@@ -89,18 +89,18 @@ public class ModHelper {
     public void saveCustomResolutionPhotoPart(ByteBuffer byteBuffer1, int i2, int i3, int i4, int i5) throws IOException {
         int i6 = i4;
         int i7 = i5;
-        if(i4 > Config.ConfigFields.customResolutionPhotoWidth - i2) {
-            i6 = Config.ConfigFields.customResolutionPhotoWidth - i2;
+        if(i4 > Config.config.customResolutionPhotoWidth - i2) {
+            i6 = Config.config.customResolutionPhotoWidth - i2;
         }
 
-        if(i5 > Config.ConfigFields.customResolutionPhotoHeight - i3) {
-            i7 = Config.ConfigFields.customResolutionPhotoHeight - i3;
+        if(i5 > Config.config.customResolutionPhotoHeight - i3) {
+            i7 = Config.config.customResolutionPhotoHeight - i3;
         }
 
         this.customResolutionPhotoLineHeight = i7;
         for(int i8 = 0; i8 < i7; ++i8) {
             byteBuffer1.position((i5 - i7) * i4 * 3 + i8 * i4 * 3);
-            int i9 = (i2 + i8 * Config.ConfigFields.customResolutionPhotoWidth) * 3;
+            int i9 = (i2 + i8 * Config.config.customResolutionPhotoWidth) * 3;
             byteBuffer1.get(this.customResolutionPhotoData, i9, i6 * 3);
         }
 
@@ -108,16 +108,16 @@ public class ModHelper {
 
     public void saveCustomResolutionPhotoLine(int i1) throws IOException {
         if(this.useTarga) {
-            this.customResolutionPhotoStream.write(this.customResolutionPhotoData, 0, Config.ConfigFields.customResolutionPhotoWidth * 3 * this.customResolutionPhotoLineHeight);
+            this.customResolutionPhotoStream.write(this.customResolutionPhotoData, 0, Config.config.customResolutionPhotoWidth * 3 * this.customResolutionPhotoLineHeight);
         } else {
-            for(int i2 = 0; i2 < Config.ConfigFields.customResolutionPhotoWidth; ++i2) {
+            for(int i2 = 0; i2 < Config.config.customResolutionPhotoWidth; ++i2) {
                 for(int i3 = 0; i3 < this.customResolutionPhotoLineHeight; ++i3) {
-                    int i4 = i2 + (this.customResolutionPhotoLineHeight - i3 - 1) * Config.ConfigFields.customResolutionPhotoWidth;
+                    int i4 = i2 + (this.customResolutionPhotoLineHeight - i3 - 1) * Config.config.customResolutionPhotoWidth;
                     int i5 = this.customResolutionPhotoData[i4 * 3 + 0] & 255;
                     int i6 = this.customResolutionPhotoData[i4 * 3 + 1] & 255;
                     int i7 = this.customResolutionPhotoData[i4 * 3 + 2] & 255;
                     int i8 = 0xFF000000 | i5 << 16 | i6 << 8 | i7;
-                    this.customResolutionPhotoImageData[i2 + (i1 + i3) * Config.ConfigFields.customResolutionPhotoWidth] = i8;
+                    this.customResolutionPhotoImageData[i2 + (i1 + i3) * Config.config.customResolutionPhotoWidth] = i8;
                 }
             }
         }
@@ -126,7 +126,7 @@ public class ModHelper {
 
     public String saveCustomResolutionPhotoScreenshot() throws IOException {
         if(!this.useTarga) {
-            this.customResolutionPhotoImage.setRGB(0, 0, Config.ConfigFields.customResolutionPhotoWidth, Config.ConfigFields.customResolutionPhotoHeight, this.customResolutionPhotoImageData, 0, Config.ConfigFields.customResolutionPhotoWidth);
+            this.customResolutionPhotoImage.setRGB(0, 0, Config.config.customResolutionPhotoWidth, Config.config.customResolutionPhotoHeight, this.customResolutionPhotoImageData, 0, Config.config.customResolutionPhotoWidth);
             ImageIO.write(this.customResolutionPhotoImage, "png", this.customResolutionPhotoStream);
         }
 
