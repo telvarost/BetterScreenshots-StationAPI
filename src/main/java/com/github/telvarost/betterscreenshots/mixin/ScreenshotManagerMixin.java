@@ -5,8 +5,6 @@ import com.github.telvarost.betterscreenshots.TransferableImage;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.util.ScreenshotManager;
-import org.lwjgl.BufferUtils;
-import org.lwjgl.opengl.GL11;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
