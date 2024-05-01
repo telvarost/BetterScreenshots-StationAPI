@@ -11,7 +11,7 @@ public class KeyBindingListener {
 
     @EventListener
     public void registerKeyBindings(KeyBindingRegisterEvent event) {
-        event.keyBindings.add(takeCustomResolutionScreenshot = new KeyBinding("Custom Photo", Keyboard.KEY_F6));
+        event.keyBindings.add(takeCustomResolutionScreenshot = new KeyBinding("Custom Photo", Keyboard.KEY_F8));
         event.keyBindings.add(takeIsometricScreenshot = new KeyBinding("Isometric Photo", Keyboard.KEY_F7));
     }
 }
