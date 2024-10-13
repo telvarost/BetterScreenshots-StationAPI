@@ -7,22 +7,24 @@ import com.github.telvarost.betterscreenshots.ModHelper;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.*;
-import net.minecraft.client.gui.InGame;
-import net.minecraft.client.options.GameOptions;
+import net.minecraft.client.gui.hud.InGameHud;
+import net.minecraft.client.input.KeyboardInput;
+import net.minecraft.client.option.GameOptions;
 import net.minecraft.client.particle.ParticleManager;
 import net.minecraft.client.render.*;
-import net.minecraft.client.sound.SoundHelper;
+import net.minecraft.client.render.texture.LavaSprite;
+import net.minecraft.client.render.texture.WaterSprite;
+import net.minecraft.client.sound.SoundManager;
 import net.minecraft.client.texture.TextureManager;
-import net.minecraft.entity.Living;
-import net.minecraft.entity.player.AbstractClientPlayer;
-import net.minecraft.entity.player.PlayerBase;
-import net.minecraft.level.Level;
-import net.minecraft.level.chunk.ChunkCache;
-import net.minecraft.level.source.LevelSource;
-import net.minecraft.level.storage.LevelStorage;
-import net.minecraft.util.ProgressListenerImpl;
-import net.minecraft.util.io.StatsFileWriter;
-import net.minecraft.util.maths.MathHelper;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.player.ClientPlayerEntity;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.stat.PlayerStats;
+import net.minecraft.util.math.MathHelper;
+import net.minecraft.world.World;
+import net.minecraft.world.chunk.ChunkSource;
+import net.minecraft.world.chunk.LegacyChunkCache;
+import net.minecraft.world.storage.WorldStorageSource;
 import org.lwjgl.LWJGLException;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.Display;
@@ -34,66 +36,66 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import java.io.File;
 
-@Mixin(Minecraft.class)
 @Environment(EnvType.CLIENT)
+@Mixin(Minecraft.class)
 public abstract class MinecraftMixin implements Runnable {
-    @Shadow
-    public ProgressListenerImpl progressListener;
 
-    @Shadow public int actualWidth;
+    @Shadow public ProgressRenderer progressRenderer;
 
-    @Shadow public int actualHeight;
+    @Shadow public int displayWidth;
 
-    @Shadow private LevelStorage levelStorage;
+    @Shadow public int displayHeight;
+
+    @Shadow private WorldStorageSource worldStorageSource;
 
     @Shadow public GameOptions options;
 
     @Shadow public TextureManager textureManager;
 
-    @Shadow public StatsFileWriter statFileWriter;
+    @Shadow public PlayerStats stats;
 
-    @Shadow public SoundHelper soundHelper;
+    @Shadow public SoundManager soundManager;
 
-    @Shadow private FlowingLavaTextureBinder lavaTextureBinder;
+    @Shadow private LavaSprite lavaSprite;
 
-    @Shadow private FlowingWaterTextureBinder2 waterTextureBinder;
+    @Shadow private WaterSprite waterSprite;
 
     @Shadow public WorldRenderer worldRenderer;
 
     @Shadow public ParticleManager particleManager;
 
-    @Shadow public Level level;
+    @Shadow public World world;
 
-    @Shadow public InGame overlay;
+    @Shadow public InGameHud inGameHud;
 
-    @Shadow public AbstractClientPlayer player;
+    @Shadow public ClientPlayerEntity player;
 
     @Shadow public volatile boolean paused;
 
-    @Shadow public BaseClientInteractionManager interactionManager;
+    @Shadow public InteractionManager interactionManager;
 
-    @Shadow public abstract boolean hasLevel();
+    @Shadow public abstract boolean isWorldRemote();
 
-    @Shadow private boolean isTakingScreenshot;
+    @Shadow private boolean screenshotKeyDown;
 
-    @Shadow private static File gameDirectory;
+    @Shadow private static File runDirectoryCache;
 
     @Shadow private int attackCooldown;
 
     @Shadow private long lastTickTime;
 
-    @Shadow public Living viewEntity;
+    @Shadow public LivingEntity camera;
 
-    @Shadow protected abstract void method_2130(String string);
+    @Shadow protected abstract void prepareWorld(String string);
 
     @Redirect(
-            method = "openScreen",
+            method = "setScreen",
             at = @At(
                     value = "INVOKE",
-                    target = "Lnet/minecraft/client/gui/InGame;clearChat()V"
+                    target = "Lnet/minecraft/client/gui/hud/InGameHud;clearChat()V"
             )
     )
-    public void betterScreenShots_openScreen(InGame instance) {
+    public void betterScreenShots_openScreen(InGameHud instance) {
         this.options.debugHud = false;
         instance.clearChat();
     }
@@ -137,21 +139,21 @@ public abstract class MinecraftMixin implements Runnable {
 //    }
 
     @Redirect(
-            method = "checkTakingScreenshot",
+            method = "handleScreenshotKey",
             at = @At(
                     value = "FIELD",
-                    target = "Lnet/minecraft/client/Minecraft;isTakingScreenshot:Z",
+                    target = "Lnet/minecraft/client/Minecraft;screenshotKeyDown:Z",
                     opcode = Opcodes.PUTFIELD,
                     ordinal = 1
             )
     )
     private void checkTakingScreenshot(Minecraft instance, boolean value) {
-        if (!Keyboard.isKeyDown(KeyBindingListener.takeCustomResolutionScreenshot.key)) {
-            this.isTakingScreenshot = false;
+        if (!Keyboard.isKeyDown(KeyBindingListener.takeCustomResolutionScreenshot.code)) {
+            this.screenshotKeyDown = false;
         }
     }
 
-    @Inject(method = "method_2110", at = @At("HEAD"), cancellable = true)
+    @Inject(method = "handleMouseDown", at = @At("HEAD"), cancellable = true)
     private void betterScreenshots_method_2110(int i, boolean bl, CallbackInfo ci) {
         if (!bl) {
             this.attackCooldown = 0;
@@ -174,12 +176,12 @@ public abstract class MinecraftMixin implements Runnable {
             method = "tick",
             at = @At(
                     value = "INVOKE",
-                    target = "Lnet/minecraft/client/gui/InGame;runTick()V"
+                    target = "Lnet/minecraft/client/gui/hud/InGameHud;tick()V"
             )
     )
-    public void betterScreenshots_tickOverlayRunTick(InGame instance) {
+    public void betterScreenshots_tickOverlayRunTick(InGameHud instance) {
         if (!this.paused) {
-            this.overlay.runTick();
+            this.inGameHud.tick();
         }
     }
 
@@ -195,100 +197,111 @@ public abstract class MinecraftMixin implements Runnable {
         int eventKey = Keyboard.getEventKey();
 
         /** - Check for CUSTOM_RESOLUTION_PHOTO keybinding pressed */
-        if(Keyboard.isKeyDown(KeyBindingListener.takeCustomResolutionScreenshot.key)) {
-            if(this.level != null) {
-                this.isTakingScreenshot = true;
-                this.overlay.addChatMessage(ModHelper.mainSaveCustomResolutionPhotoScreenshot((Minecraft) (Object)this, this.gameDirectory, this.actualWidth, this.actualHeight, Config.config.customResolutionPhotoWidth, Config.config.customResolutionPhotoHeight, (System.getProperty("os.name").toLowerCase().contains("mac")) ? Keyboard.isKeyDown(Keyboard.KEY_LMETA) || Keyboard.isKeyDown(Keyboard.KEY_RMETA) : Keyboard.isKeyDown(Keyboard.KEY_LCONTROL) || Keyboard.isKeyDown(Keyboard.KEY_RCONTROL)));
+        if(Keyboard.isKeyDown(KeyBindingListener.takeCustomResolutionScreenshot.code)) {
+            if(this.world != null) {
+                this.screenshotKeyDown = true;
+                this.inGameHud.addChatMessage(
+                        ModHelper.mainSaveCustomResolutionPhotoScreenshot((Minecraft) (Object)this,
+                                this.runDirectoryCache,
+                                this.displayWidth,
+                                this.displayHeight,
+                                Config.config.customResolutionPhotoWidth,
+                                Config.config.customResolutionPhotoHeight,
+                                (System.getProperty("os.name").toLowerCase().contains("mac"))
+                                        ? Keyboard.isKeyDown(Keyboard.KEY_LMETA) || Keyboard.isKeyDown(Keyboard.KEY_RMETA)
+                                        : Keyboard.isKeyDown(Keyboard.KEY_LCONTROL) || Keyboard.isKeyDown(Keyboard.KEY_RCONTROL)
+                        )
+                );
             }
         } else {
             if (!Keyboard.isKeyDown(60)) {
-                this.isTakingScreenshot = false;
+                this.screenshotKeyDown = false;
             }
         }
 
         /** - Check for ISOMETRIC_PHOTO keybinding pressed */
-        if(this.level != null && eventKey == KeyBindingListener.takeIsometricScreenshot.key) {
-            this.progressListener.notifyWithGameRunning("Taking isometric screenshot");
-            IsometricScreenshotRenderer isoRenderer = (new IsometricScreenshotRenderer((Minecraft) (Object)this, this.gameDirectory));
+        if(this.world != null && eventKey == KeyBindingListener.takeIsometricScreenshot.code) {
+            this.progressRenderer.progressStart("Taking isometric screenshot");
+            IsometricScreenshotRenderer isoRenderer = (new IsometricScreenshotRenderer((Minecraft) (Object)this, this.runDirectoryCache));
             isoRenderer.doRender();
         }
 
         return eventKey;
     }
 
-    @Inject(method = "showLevelProgress", at = @At("HEAD"), cancellable = true)
-    public void betterScreenshots_showLevelProgress(Level arg, String string, PlayerBase arg2, CallbackInfo ci) {
-        this.statFileWriter.method_1991();
-        this.statFileWriter.sync();
-        this.viewEntity = null;
-        if(this.progressListener != null) { // Addition
-            this.progressListener.notifyWithGameRunning(string);
-            this.progressListener.method_1796("");
+    @Inject(method = "setWorld(Lnet/minecraft/world/World;Ljava/lang/String;Lnet/minecraft/entity/player/PlayerEntity;)V", at = @At("HEAD"), cancellable = true)
+    public void betterScreenshots_showLevelProgress(World arg, String string, PlayerEntity arg2, CallbackInfo ci) {
+        this.stats.method_1991();
+        this.stats.save();
+        this.camera = null;
+        if(this.progressRenderer != null) { // Addition
+            this.progressRenderer.progressStart(string);
+            this.progressRenderer.progressStage("");
         } // Addition
-        this.soundHelper.playStreaming((String)null, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F);
-        if (this.level != null) {
-            this.level.saveLevel(this.progressListener);
+        this.soundManager.playStreaming((String)null, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F);
+        if (this.world != null) {
+            this.world.savingProgress(this.progressRenderer);
         }
 
-        this.level = arg;
+        this.world = arg;
         if (arg != null) {
             //this.interactionManager.method_1710(arg);
-            if (!this.hasLevel()) {
+            if (!this.isWorldRemote()) {
                 if (arg2 == null) {
-                    this.player = (AbstractClientPlayer)arg.method_278(AbstractClientPlayer.class);
+                    this.player = (ClientPlayerEntity)arg.getPlayerForProxy(ClientPlayerEntity.class);
                 }
             } else if (this.player != null) {
-                this.player.afterSpawn();
+                this.player.teleportTop();
 //                if (arg != null) {
 //                    arg.spawnEntity(this.player);
 //                }
                 arg.spawnEntity(this.player); // Addition
             }
 
-            if (!arg.isServerSide) {
-                this.method_2130(string);
+            if (!arg.isRemote) {
+                this.prepareWorld(string);
             }
 
-            this.interactionManager.method_1710(arg);
+            this.interactionManager.setWorld(arg);
             if (this.player == null) {
-                this.player = (AbstractClientPlayer)this.interactionManager.method_1717(arg);
-                this.player.afterSpawn();
-                this.interactionManager.rotatePlayer(this.player);
+                this.player = (ClientPlayerEntity)this.interactionManager.createPlayer(arg);
+                this.player.teleportTop();
+                this.interactionManager.preparePlayer(this.player);
             }
 
-            this.player.playerKeypressManager = new MovementManager(this.options);
+            this.player.input = new KeyboardInput(this.options);
             if (this.worldRenderer != null) {
-                this.worldRenderer.method_1546(arg);
+                this.worldRenderer.setWorld(arg);
             }
 
             if (this.particleManager != null) {
-                this.particleManager.method_323(arg);
+                this.particleManager.setWorld(arg);
             }
 
             //this.interactionManager.method_1718(this.player);
-            this.waterTextureBinder.id = this.textureManager.getTextureId("/misc/water.png"); // Addition
-            this.lavaTextureBinder.id = 0; // Addition
+            this.waterSprite.copyTo = this.textureManager.getTextureId("/misc/water.png"); // Addition
+            this.lavaSprite.copyTo = 0; // Addition
             if (arg2 != null) {
-                arg.method_285();
+                arg.saveWorldData();
             }
 
-            LevelSource var4 = arg.getCache();
-            if (var4 instanceof ChunkCache) {
-                ChunkCache var5 = (ChunkCache)var4;
+            ChunkSource var4 = arg.getChunkSource();
+            if (var4 instanceof LegacyChunkCache) {
+                LegacyChunkCache var5 = (LegacyChunkCache)var4;
                 int var6 = MathHelper.floor((float)((int)this.player.x)) >> 4;
                 int var7 = MathHelper.floor((float)((int)this.player.z)) >> 4;
-                var5.method_1242(var6, var7);
+                var5.setSpawnPoint(var6, var7);
             }
 
             arg.addPlayer(this.player);
-            this.interactionManager.method_1718(this.player); // Addition
-            if (arg.field_215) {
-                arg.saveLevel(this.progressListener);
+            this.interactionManager.preparePlayerRespawn(this.player); // Addition
+            if (arg.newWorld) {
+                arg.savingProgress(this.progressRenderer);
             }
 
-            this.viewEntity = this.player;
+            this.camera = this.player;
         } else {
-            this.levelStorage.method_1003(); // Addition
+            this.worldStorageSource.flush(); // Addition
             this.player = null;
         }
 

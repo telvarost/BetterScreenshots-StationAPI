@@ -2,8 +2,8 @@ package com.github.telvarost.betterscreenshots.mixin;
 
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.minecraft.util.ProgressListener;
-import net.minecraft.util.ProgressListenerImpl;
+import net.minecraft.client.gui.screen.LoadingDisplay;
+import net.minecraft.client.render.ProgressRenderer;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
@@ -11,25 +11,25 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-@Mixin(ProgressListenerImpl.class)
 @Environment(EnvType.CLIENT)
-public abstract class ProgressListenerImplMixin implements ProgressListener {
+@Mixin(ProgressRenderer.class)
+public abstract class ProgressListenerImplMixin implements LoadingDisplay {
 
-    @Shadow private String message;
+    @Shadow private String title;
 
     @Redirect(
-            method = "notifyIgnoreGameRunning",
+            method = "progressStartNoAbort",
             at = @At(
                     value = "INVOKE",
-                    target = "Lnet/minecraft/util/ProgressListenerImpl;notify(Ljava/lang/String;)V"
+                    target = "Lnet/minecraft/client/render/ProgressRenderer;start(Ljava/lang/String;)V"
             )
     )
-    public void notifyIgnoreGameRunning(ProgressListenerImpl instance, String s) {
-        instance.notify(s);
+    public void notifyIgnoreGameRunning(ProgressRenderer instance, String s) {
+        instance.start(s);
     }
 
-    @Inject(method = "notify", at = @At("HEAD"), cancellable = true)
+    @Inject(method = "start", at = @At("HEAD"), cancellable = true)
     public void notify(String string, CallbackInfo ci) {
-        this.message = string;
+        this.title = string;
     }
 }

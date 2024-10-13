@@ -4,7 +4,7 @@ import com.github.telvarost.betterscreenshots.Config;
 import com.github.telvarost.betterscreenshots.TransferableImage;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.minecraft.client.util.ScreenshotManager;
+import net.minecraft.client.Screenshot;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
@@ -17,11 +17,11 @@ import java.io.File;
 import java.io.IOException;
 
 @Environment(EnvType.CLIENT)
-@Mixin(ScreenshotManager.class)
+@Mixin(Screenshot.class)
 public class ScreenshotManagerMixin {
 
     @Redirect(
-            method = "takeScreenshot",
+            method = "take",
             at = @At(
                     value = "INVOKE",
                     target = "Ljavax/imageio/ImageIO;write(Ljava/awt/image/RenderedImage;Ljava/lang/String;Ljava/io/File;)Z"

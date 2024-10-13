@@ -1,10 +1,10 @@
 package com.github.telvarost.betterscreenshots.mixin;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.render.GameRenderer;
 import net.minecraft.client.render.WorldRenderer;
-import net.minecraft.entity.player.PlayerBase;
-import net.minecraft.item.ItemInstance;
-import net.minecraft.sortme.GameRenderer;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.hit.HitResult;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.util.glu.GLU;
@@ -18,46 +18,46 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(GameRenderer.class)
 public abstract class GameRendererMixin {
 
-    @Shadow private Minecraft minecraft;
+    @Shadow private Minecraft client;
 
-    @Shadow private float field_2350;
+    @Shadow private float viewDistance;
 
-    @Shadow private double field_2331;
+    @Shadow private double zoom;
 
-    @Shadow private double field_2332;
+    @Shadow private double zoomX;
 
-    @Shadow private double field_2333;
+    @Shadow private double zoomY;
 
-    @Shadow protected abstract float method_1848(float f);
+    @Shadow protected abstract float getFov(float f);
 
-    @Inject(method = "method_1845", at = @At("HEAD"), cancellable = true)
+    @Inject(method = "renderFirstPersonHand", at = @At("HEAD"), cancellable = true)
     private void betterScreenshots_method_1845(float f, int i, CallbackInfo ci) {
         GL11.glMatrixMode(GL11.GL_PROJECTION);
         GL11.glLoadIdentity();
         float f3 = 0.07F;
-        if(this.minecraft.options.anaglyph3d) {
+        if(this.client.options.anaglyph3d) {
             GL11.glTranslatef((float)(i * 2 - 1) * f3, 0.0F, 0.0F);
         }
 
-        if(this.field_2331 != 1.0D) {
-            GL11.glTranslatef((float)this.field_2332, (float)(-this.field_2333), 0.0F);
-            GL11.glScaled(this.field_2331, this.field_2331, 1.0D);
+        if(this.zoom != 1.0D) {
+            GL11.glTranslatef((float)this.zoomX, (float)(-this.zoomY), 0.0F);
+            GL11.glScaled(this.zoom, this.zoom, 1.0D);
         }
 
-        GLU.gluPerspective(this.method_1848(f), (float)this.minecraft.actualWidth / (float)this.minecraft.actualHeight, 0.05F, this.field_2350 * 2.0F);
+        GLU.gluPerspective(this.getFov(f), (float)this.client.displayWidth / (float)this.client.displayHeight, 0.05F, this.viewDistance * 2.0F);
         GL11.glMatrixMode(GL11.GL_MODELVIEW);
     }
 
     @Redirect(
-            method = "delta",
+            method = "renderFrame",
             at = @At(
                     value = "INVOKE",
-                    target = "Lnet/minecraft/client/render/WorldRenderer;method_1554(Lnet/minecraft/entity/player/PlayerBase;Lnet/minecraft/util/hit/HitResult;ILnet/minecraft/item/ItemInstance;F)V"
+                    target = "Lnet/minecraft/client/render/WorldRenderer;renderBlockOutline(Lnet/minecraft/entity/player/PlayerEntity;Lnet/minecraft/util/hit/HitResult;ILnet/minecraft/item/ItemStack;F)V"
             )
     )
-    public void betterScreenshots_delta(WorldRenderer instance, PlayerBase arg, HitResult arg2, int i, ItemInstance arg3, float f) {
-        if (!this.minecraft.options.hideHud) {
-            instance.method_1554(arg, arg2, i, arg3, f);
+    public void betterScreenshots_delta(WorldRenderer instance, PlayerEntity arg, HitResult arg2, int i, ItemStack arg3, float f) {
+        if (!this.client.options.hideHud) {
+            instance.renderBlockOutline(arg, arg2, i, arg3, f);
         }
     }
 }

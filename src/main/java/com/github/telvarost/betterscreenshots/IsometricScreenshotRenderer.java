@@ -13,21 +13,20 @@ import java.util.Date;
 import javax.imageio.ImageIO;
 
 import com.github.telvarost.betterscreenshots.mixin.GameRendererInvoker;
-import net.minecraft.class_573;
 import net.minecraft.client.Minecraft;
-
-import net.minecraft.client.render.RenderHelper;
+import net.minecraft.client.gui.screen.LoadingDisplay;
+import net.minecraft.client.render.FrustumCuller;
 import net.minecraft.client.render.WorldRenderer;
-import net.minecraft.level.Level;
-import net.minecraft.util.ProgressListener;
-import net.minecraft.util.maths.MathHelper;
+import net.minecraft.client.render.platform.Lighting;
+import net.minecraft.util.math.MathHelper;
+import net.minecraft.world.World;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.GL11;
 
 public class IsometricScreenshotRenderer {
-    private ProgressListener progressUpdate;
+    private LoadingDisplay progressUpdate;
     private Minecraft mc;
-    private Level worldObj;
+    private World worldObj;
     private WorldRenderer renderGlobal;
     private int width;
     private int length;
@@ -39,9 +38,9 @@ public class IsometricScreenshotRenderer {
 
     public IsometricScreenshotRenderer(Minecraft minecraft, File _gameDirectory) {
         this.gameDirectory = _gameDirectory;
-        this.progressUpdate = minecraft.progressListener;
+        this.progressUpdate = minecraft.progressRenderer;
         this.mc = minecraft;
-        this.worldObj = this.mc.level;
+        this.worldObj = this.mc.world;
         this.renderGlobal = this.mc.worldRenderer;
         this.width = (64 << (3 - this.mc.options.viewDistance)) + 16;
         if(this.width > 416) {
@@ -69,14 +68,14 @@ public class IsometricScreenshotRenderer {
     }
 
     public void doRender() {
-        this.progressUpdate.notifyIgnoreGameRunning("Taking isometric screenshot");
+        this.progressUpdate.progressStartNoAbort("Taking isometric screenshot");
         File outputFile = this.getOutputFile();
         int isometricScreenshotAngle = ((Config.config.isometricPhotoRotation.ordinal() * 90) + Config.config.isometricPhotoRotationOffset);
-        this.progressUpdate.method_1796("Rendering with resolution of " + Config.config.isometricPhotoScale + " and angle of " + isometricScreenshotAngle + " deg");
+        this.progressUpdate.progressStage("Rendering with resolution of " + Config.config.isometricPhotoScale + " and angle of " + isometricScreenshotAngle + " deg");
         this.progressUpdate.progressStagePercentage(0);
         ModHelper.ModHelperFields.isTakingIsometricScreenshot = true;
-        double posX = this.mc.viewEntity.prevRenderX;
-        double posZ = this.mc.viewEntity.prevRenderY;
+        double posX = this.mc.camera.lastTickX;
+        double posZ = this.mc.camera.lastTickY;
         System.out.println(posX + " " + posZ);
         posX -= (MathHelper.floor(posX) >> 4) * 16 + 8;
         posZ -= (MathHelper.floor(posZ) >> 4) * 16 + 8;
@@ -101,8 +100,8 @@ public class IsometricScreenshotRenderer {
             int i3 = (this.height * Config.config.isometricPhotoScale) + i1 / 2;
             BufferedImage image = new BufferedImage(i1, i3, 1);
             Graphics graphics = image.getGraphics();
-            int dWidth = this.mc.actualWidth;
-            int dHeight = this.mc.actualHeight;
+            int dWidth = this.mc.displayWidth;
+            int dHeight = this.mc.displayHeight;
             int total = (i1 / dWidth + 1) * (i3 / dHeight + 1);
             int progress = 0;
 
@@ -137,32 +136,32 @@ public class IsometricScreenshotRenderer {
                     GL11.glMultMatrix(this.floatBuffer);
                     GL11.glRotatef(isometricScreenshotAngle, 0.0F, 1.0F, 0.0F);
                     GL11.glTranslated(posX, 0, posZ);
-                    GL11.glTranslated(-this.mc.viewEntity.prevRenderX, (double)-this.height / 2.0D, -this.mc.viewEntity.prevRenderZ);
-                    class_573 frustrum = new FrustrumIsom();
-                    this.renderGlobal.method_1550(frustrum, 0.0F);
-                    GL11.glTranslated(this.mc.viewEntity.prevRenderX, this.mc.viewEntity.prevRenderY, this.mc.viewEntity.prevRenderZ);
-                    this.renderGlobal.method_1549(this.mc.viewEntity, false);
+                    GL11.glTranslated(-this.mc.camera.lastTickX, (double)-this.height / 2.0D, -this.mc.camera.lastTickZ);
+                    FrustumCuller frustrum = new FrustrumIsom();
+                    this.renderGlobal.cullChunks(frustrum, 0.0F);
+                    GL11.glTranslated(this.mc.camera.lastTickX, this.mc.camera.lastTickY, this.mc.camera.lastTickZ);
+                    this.renderGlobal.compileChunks(this.mc.camera, false);
                     //((GameRendererInvoker) this.mc.gameRenderer).setupFog(0, 0.0F);
                     GL11.glEnable(GL11.GL_FOG);
                     GL11.glFogi(GL11.GL_FOG_MODE, GL11.GL_LINEAR);
                     float f3 = (float)this.height * 8.0F;
                     GL11.glFogf(GL11.GL_FOG_START, 5000.0F - f3);
                     GL11.glFogf(GL11.GL_FOG_END, 5000.0F + f3 * 8.0F);
-                    RenderHelper.enableLighting();
-                    this.renderGlobal.method_1544(this.mc.viewEntity.method_931(0.0F), frustrum, 0.0F);
+                    Lighting.turnOn();
+                    this.renderGlobal.renderEntities(this.mc.camera.getPosition(0.0F), frustrum, 0.0F);
                     ((GameRendererInvoker) this.mc.gameRenderer).renderRainSnow(0.0F);
-                    RenderHelper.disableLighting();
+                    Lighting.turnOff();
                     this.renderGlobal.renderSky(0.0F);
                     GL11.glBindTexture(GL11.GL_TEXTURE_2D, this.mc.textureManager.getTextureId("/terrain.png"));
                     if(this.mc.options.ao) {
                         GL11.glShadeModel(GL11.GL_SMOOTH);
                     }
 
-                    this.renderGlobal.method_1548(this.mc.viewEntity, 0, 0.0F);
+                    this.renderGlobal.render(this.mc.camera, 0, 0.0F);
                     GL11.glShadeModel(GL11.GL_FLAT);
                     if(this.worldObj.dimension.getCloudHeight() < this.maxCloudHeight) {
                         GL11.glPushMatrix();
-                        this.renderGlobal.renderClouds(0.0F);
+                        this.renderGlobal.renderFancyClouds(0.0F);
                         GL11.glPopMatrix();
                     }
 
@@ -174,13 +173,13 @@ public class IsometricScreenshotRenderer {
                     }
 
                     GL11.glBindTexture(GL11.GL_TEXTURE_2D, this.mc.textureManager.getTextureId("/terrain.png"));
-                    int i11 = this.renderGlobal.method_1548(this.mc.viewEntity, 1, 0.0F);
+                    int i11 = this.renderGlobal.render(this.mc.camera, 1, 0.0F);
                     GL11.glShadeModel(GL11.GL_FLAT);
                     GL11.glEnable(GL11.GL_BLEND);
                     GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
                     GL11.glColorMask(true, true, true, true);
                     if(i11 > 0) {
-                        this.renderGlobal.method_1540(1, 0.0F);
+                        this.renderGlobal.renderLastChunks(1, 0.0F);
                     }
 
                     GL11.glTranslated(-posX, 0.0D, -posZ);
@@ -208,13 +207,13 @@ public class IsometricScreenshotRenderer {
             }
 
             graphics.dispose();
-            this.progressUpdate.method_1796("Saving screenshot as " + outputFile.getName().toString());
+            this.progressUpdate.progressStage("Saving screenshot as " + outputFile.getName().toString());
             this.progressUpdate.progressStagePercentage(100);
             FileOutputStream stream = new FileOutputStream(outputFile);
             ImageIO.write(image, "png", stream);
             stream.close();
         } catch (OutOfMemoryError e) {
-            this.mc.overlay.addChatMessage("Out of memory. Reduce render distance and try again.");
+            this.mc.inGameHud.addChatMessage("Out of memory. Reduce render distance and try again.");
         } catch (Throwable t) {
             t.printStackTrace();
         }

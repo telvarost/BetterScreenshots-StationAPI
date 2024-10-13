@@ -3,8 +3,8 @@ package com.github.telvarost.betterscreenshots;
 import com.github.telvarost.betterscreenshots.mixin.GameRendererInvoker;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.minecraft.achievement.IAchievementDescriptionFormat;
 import net.minecraft.client.Minecraft;
+import net.minecraft.stat.achievement.AchievementStatFormatter;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.Display;
@@ -25,7 +25,7 @@ import java.util.Date;
 public class ModHelper {
 
     @Environment(EnvType.CLIENT)
-    public static class betterScreenShots_class_637 implements IAchievementDescriptionFormat {
+    public static class betterScreenShots_class_637 implements AchievementStatFormatter {
         Minecraft instance;
 
         public betterScreenShots_class_637(Minecraft minecraft) {
@@ -33,7 +33,7 @@ public class ModHelper {
         }
 
         public String format(String string) {
-            return String.format(string, Keyboard.getKeyName(instance.options.inventoryKey.key));
+            return String.format(string, Keyboard.getKeyName(instance.options.inventoryKey.code));
         }
     }
 
@@ -152,7 +152,7 @@ public class ModHelper {
                     ((GameRendererInvoker) instance.gameRenderer).setCameraZoom(d12);
                     ((GameRendererInvoker) instance.gameRenderer).setCameraYaw(d18);
                     ((GameRendererInvoker) instance.gameRenderer).setCameraPitch(d20);
-                    instance.gameRenderer.delta(1.0F, 0L);
+                    instance.gameRenderer.renderFrame(1.0F, 0L);
                     ((GameRendererInvoker) instance.gameRenderer).setCameraZoom(1.0F);
                     ((GameRendererInvoker) instance.gameRenderer).setCameraYaw(0.0F);
                     ((GameRendererInvoker) instance.gameRenderer).setCameraPitch(0.0F);
